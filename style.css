@@ -1,8 +1,6 @@
 body {
   background-color: rgb(56,220, 250);
   margin: 0px;
-  overflow: hidden;
-  position: relative;
 }
 
 .start-btn {
@@ -14,5 +12,5 @@ body {
 .control-btn {
   position: absolute;
   top: 10px;
-  left: calc(100% - 60px);
+  left: 0;
 }
