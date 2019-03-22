@@ -1,110 +1,161 @@
 "use strict";
 
-const MIN_DOT_DIAMETER = 10;
-const MAX_DOT_DIAMETER = 100;
+const CONFIG = {
+  // Minimum diameter of the dot in px
+  minDotDiameter: 10,
+  // Maximun diameter of the dot in px
+  maxDotDiameter: 100,
+  // Game speed in px per second (speed = (5 * 10)px)
+  initSpeed: 5,
+  // Frequency to push dot in ms (1000ms = 1s)
+  frequency: 1000
+}
 
-class Utils {
+class Game {
   constructor() {
+    // Whether game is on or pause/off 
     this.isPlaying = false;
-    this.dotArr = [];
+    // List of all dots
+    this.dots = [];
+    // X co-ordinate of click - defaults to 0
     this.mouseX = 0;
+    // Y co-ordinate of click - defaults to 0
     this.mouseY = 0;
+    // Total score
     this.score = 0;
     this.canvas = document.getElementById("canvas");
     this.c = this.canvas.getContext("2d");
+    // Slider element
+    this.slider = document.getElementById("speedSlider");
+    // Current speed of the game
+    this.speed = CONFIG.initSpeed;
     this.setCanvasSize();
     this.bindResize();
+    this.bindSlider();
+    this.bindBlur();
   }
 
   // Utility method to find random numbers
-  getRndInteger(min, max) {
+  getRandomdInteger(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
   }
 
+  // Set the dimensions of canvas
   setCanvasSize() {
     this.canvas.width = window.outerWidth;
     this.canvas.height = window.outerHeight;
   }
 
   bindResize() {
-    window.addEventListener('resize', function () {
-      utils.setCanvasSize();
-    }, false);
+    // Recalculate the canvas dimensions on browser resize (responsive support)
+    window.addEventListener('resize', () => game.setCanvasSize());
+  }
+
+  randomColor() {
+    // Random r,g,b value has been calculated
+    return `rgb(${Math.round(Math.random() * 250)}, ${Math.round(Math.random() * 250)}, ${Math.round(Math.random() * 250)})`;
+  }
+
+  // Slider event to control the speed of the game
+  bindSlider() {
+    this.slider.oninput = () => this.speed = this.slider.value
+  }
+
+  bindBlur() {
+    // Pause the game once out of focus
+    window.addEventListener('blur', () => this.isPlaying = false)
+  }
+
+  removeDot(index) {
+    this.dots.splice(index, 1);
+  }
+
+  handleDotClick(dot, index) {
+    // Logic to find clicked dot
+    if (this.mouseX > dot.x - dot.radius &&
+      this.mouseX < dot.x + dot.radius &&
+      this.mouseY > dot.y - dot.radius &&
+      this.mouseY < dot.y + dot.radius) {
+
+      dot.radius = 0; // Hide clicked dot
+      this.score += dot.points; // Increment score
+      document.getElementById('score').innerHTML = this.score;
+
+      // Reset clicked coordinates. Otherwise future dots of same coordinates will be considered as clicked
+      this.mouseX = 0;
+      this.mouseY = 0;
+    }
+
+    if (dot.y > window.outerHeight + CONFIG.maxDotDiameter) {
+      this.dots.splice(index, 1);
+    }
   }
 }
 
-const utils = new Utils();
+// Create new instance of Game
+const game = new Game();
 
 class Dot {
   constructor() {
-    this.color = 'blue';
-    this.radius = utils.getRndInteger(1, 10) * MIN_DOT_DIAMETER / 2;
-    this.x = utils.getRndInteger(MAX_DOT_DIAMETER, utils.canvas.width - MAX_DOT_DIAMETER); // returns a random integer between 100 and (canvas width - 100)
+    this.color = game.randomColor();
+    this.radius = game.getRandomdInteger(1, 10) * CONFIG.minDotDiameter / 2;
+    // Random X co-ordinate of the dot ranges from 100 to (canvas width - 100)
+    this.x = game.getRandomdInteger(CONFIG.maxDotDiameter, game.canvas.width - CONFIG.maxDotDiameter);
+    // Initial Y co-ordinate of the dot
     this.y = -this.radius;
-    this.points = (MAX_DOT_DIAMETER - this.radius * 2) / 10 + 1; // Points inversely proportional to radius
-    
+    // Points inversely proportional to radius
+    this.points = (CONFIG.maxDotDiameter - this.radius * 2) / 10 + 1;
   }
 
   update() {
-    utils.c.beginPath();
-    utils.c.arc(this.x, this.y, this.radius, 0, 2 * Math.PI);
-    utils.c.fillStyle = this.color;
-    utils.c.fill();
+    game.c.beginPath();
+    game.c.arc(this.x, this.y, this.radius, 0, 2 * Math.PI);
+    game.c.fillStyle = this.color;
+    game.c.fill();
   }
 }
 
 function start() {
   document.getElementById('startBtn').style.display = 'none';
-  utils.isPlaying = true;
-  utils.dotArr.push(new Dot())
+  game.isPlaying = true;
+  game.dots.push(new Dot())
   animate();
 
   // Push dot every second
   setInterval(function () {
-    if (utils.isPlaying) {
-      utils.dotArr.push(new Dot());
+    // Check whether game is on before adding new dot
+    if (game.isPlaying) {
+      game.dots.push(new Dot());
     }
-  }, 1000);
+  }, CONFIG.frequency);
 
-  window.addEventListener('click', function () {
-    utils.mouseX = event.clientX;
-    utils.mouseY = event.clientY;
-  }, false);
+  window.addEventListener('click', () => {
+    game.mouseX = event.clientX;
+    game.mouseY = event.clientY;
+  });
 }
 
 function animate() {
-  if (!utils.isPlaying) {
-    cancelAnimationFrame(animate); // Cancel animation on game pause 
+  if (!game.isPlaying) {
+    // Pause the game
+    cancelAnimationFrame(animate);
     return;
   }
 
   requestAnimationFrame(animate); // Continue animation if game is on.
-  utils.c.clearRect(0, 0, utils.canvas.width, utils.canvas.height);
-  utils.dotArr.forEach(each => {
-    each.update();
+  game.c.clearRect(0, 0, game.canvas.width, game.canvas.height);
+  game.dots.forEach((dot, index) => {
+    dot.update();
     // Speed range is 10px ~ 100px per second based on the configuration.
     // requestAnimationFrame repaint every 1/60 seconds. So (y += 1 / 60 * <10 ~ 100>) adds (10 ~ 100) every second
-    each.y += 5 / 6;
+    dot.y += game.speed / 6;
 
-    // Logic to find clicked dot
-    if (utils.mouseX > each.x - each.radius &&
-      utils.mouseX < each.x + each.radius &&
-      utils.mouseY > each.y - each.radius &&
-      utils.mouseY < each.y + each.radius) {
-
-      each.radius = 0; // Hide clicked dot
-      utils.score += each.points; // Increment score
-      document.getElementById('score').innerHTML = utils.score;
-
-      // Reset clicked coordinates. Otherwise future dots of same coordinates will be considered as clicked
-      utils.mouseX = 0;
-      utils.mouseY = 0;
-    }
+    game.handleDotClick(dot, index);
   });
 }
 
 function controlAnimation() {
-  utils.isPlaying = !utils.isPlaying; // Toggle game status
+  game.isPlaying = !game.isPlaying; // Toggle game status
   animate(); // Handle animations based on game status
 }
 
