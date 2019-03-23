@@ -102,7 +102,7 @@ class Dot {
     this.color = game.randomColor();
     this.radius = game.getRandomdInteger(1, 10) * CONFIG.minDotDiameter / 2;
     // Random X co-ordinate of the dot ranges from 100 to (canvas width - 100)
-    this.x = game.getRandomdInteger(CONFIG.maxDotDiameter, game.canvas.width - CONFIG.maxDotDiameter);
+    this.x = game.getRandomdInteger(CONFIG.maxDotDiameter / 2, game.canvas.width - CONFIG.maxDotDiameter / 2);
     // Initial Y co-ordinate of the dot
     this.y = -this.radius;
     // Points inversely proportional to radius

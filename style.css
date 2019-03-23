@@ -5,6 +5,13 @@ body {
   overflow: hidden;
 }
 
+header {
+  background: rgba(0, 0, 0, 0.1);
+  height: 100px;
+  position: absolute;
+  width: 100%;
+}
+
 .start-btn {
   position: absolute;
   top: 50%;
@@ -15,12 +22,6 @@ body {
   position: absolute;
   top: 10px;
   left: 0;
-}
-
-.banner-container {
-  background: rgba(255, 255, 255, .5);
-  position: absolute;
-  width: 100%;
 }
 
 .banner {
@@ -35,15 +36,25 @@ body {
   text-align: center;
 }
 
+.slider-container {
+  -webkit-transform: rotate(-90deg);
+  position: absolute;
+  right: -100px;
+  top: 270px;
+  transform: rotate(-90deg);
+}
+
 .slider {
   -webkit-appearance: none;
   appearance: none;
-  height: 1em;
-  background: #d3d3d3;
+  border-radius: 5px;
+  height: 0.5em;
+  background: rgba(0, 0, 0, 0.5);
   outline: none;
-  opacity: 0.7;
+  /* opacity: 0.7; */
   -webkit-transition: .2s;
   transition: opacity .2s;
+  width: 270px;
 }
 
 .slider:hover {
@@ -53,11 +64,11 @@ body {
 .slider::-webkit-slider-thumb {
   -webkit-appearance: none;
   appearance: none;
-  width: 25px;
-  height: 25px;
-  border-radius: 50%; 
-  background: #4CAF50;
+  background: rgb(0, 0, 0);
+  border-radius: 10px; 
   cursor: pointer;
+  height: 20px;
+  width: 20px;
 }
 
 .number {

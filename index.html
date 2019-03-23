@@ -9,7 +9,7 @@
 </head>
 
 <body>
-  <header class="banner-container">
+  <header>
     <div class="banner">
 
       <!-- Score -->
@@ -17,13 +17,6 @@
         <div class="label">SCORE</div>
         <div id="score" class="number">0</div>
         <div class="label l-h-0">coins</div>
-      </div>
-
-      <!-- Slider -->
-      <div class="element">
-        <div style="width: 100%">
-          <input type="range" min="1" max="10" value="5" id="speedSlider" class="slider">
-        </div>
       </div>
 
       <!-- Speed -->
@@ -35,6 +28,11 @@
 
     </div>
   </header>
+  <div class="slider-container">
+    <!-- Slider -->
+      <input type="range" min="1" max="10" value="5" id="speedSlider" class="slider">
+    </div>
+  </div>
   <canvas id="canvas"></canvas>
 
   <button type="button" id="startBtn" class="start-btn" onclick="start()">Start</button>
