@@ -9,30 +9,40 @@
 </head>
 
 <body>
-  <header>
-    <div class="banner">
-
-      <!-- Score -->
+  <header class="wrapper">
+    <!-- Score -->
+    <div class="child-wrapper">
       <div class="element">
         <div class="label">SCORE</div>
         <div id="score" class="number">0</div>
         <div class="label l-h-0">coins</div>
       </div>
+    </div>
 
-      <!-- Speed -->
+    <div class="child-wrapper">
       <div class="element">
-        <div class="label">SPEED</div>
-        <div id="speed" class="number">0</div>
-        <div class="label l-h-0">px/s</div>
+        <button type="button" id="controlBtn" class="control-btn" onclick="controlAnimation()">Pause</button>
+      </div>
+    </div>
+
+    <div class="child-wrapper">
+        <div class="element">
+          <button type="button" class="control-btn" onclick="controlAnimation()">Play</button>
+        </div>
       </div>
 
+    <!-- Speed -->
+    <div class="child-wrapper">
+      <div class="element">
+        <span class="label">SPEED</span>
+        <span id="speed" class="number">0</span>
+        <span class="label">px/s</span>
+        <div>
+          <input type="range" min="1" max="10" value="5" id="speedSlider" class="slider">
+        </div>
+      </div>
     </div>
   </header>
-  <div class="slider-container">
-    <!-- Slider -->
-      <input type="range" min="1" max="10" value="5" id="speedSlider" class="slider">
-    </div>
-  </div>
   <canvas id="canvas"></canvas>
 
   <button type="button" id="startBtn" class="start-btn" onclick="start()">Start</button>

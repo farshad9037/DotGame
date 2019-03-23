@@ -125,6 +125,11 @@ function start() {
     }
     setTimeout(pushDot, CONFIG.frequency);
   };
+  const onClick = () => {
+    game.mouseX = event.clientX;
+    game.mouseY = event.clientY;
+  };
+
   document.getElementById('startBtn').style.display = 'none';
   game.isPlaying = true;
   game.dots.push(new Dot())
@@ -133,10 +138,8 @@ function start() {
   // Push dot every second
   setTimeout(pushDot, CONFIG.frequency);
 
-  game.canvas.addEventListener('click', () => {
-    game.mouseX = event.clientX;
-    game.mouseY = event.clientY;
-  });
+  game.canvas.addEventListener('click', onClick);
+  game.canvas.addEventListener("touchstart", onClick);
 }
 
 function animate() {

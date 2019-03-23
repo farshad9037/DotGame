@@ -5,43 +5,30 @@ body {
   overflow: hidden;
 }
 
-header {
+.wrapper {
   background: rgba(0, 0, 0, 0.1);
-  height: 100px;
   position: absolute;
   width: 100%;
+  align-items: center;
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-around;
+  padding: 0.5em;
+}
+
+.child-wrapper {
+  text-align: center;
+}
+
+.element {
+  padding: 0.5em;
+  border-right: 1px solid rgba(0, 0, 0, 0.1);
 }
 
 .start-btn {
   position: absolute;
   top: 50%;
   left: 50%;
-}
-
-.control-btn {
-  position: absolute;
-  top: 10px;
-  left: 0;
-}
-
-.banner {
-  align-items: center;
-  display: flex;
-  flex-flow: row wrap;
-  justify-content: space-between;
-}
-
-.element {
-  padding: 1em;
-  text-align: center;
-}
-
-.slider-container {
-  -webkit-transform: rotate(-90deg);
-  position: absolute;
-  right: -100px;
-  top: 270px;
-  transform: rotate(-90deg);
 }
 
 .slider {
@@ -54,7 +41,6 @@ header {
   /* opacity: 0.7; */
   -webkit-transition: .2s;
   transition: opacity .2s;
-  width: 270px;
 }
 
 .slider:hover {
