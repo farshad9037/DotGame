@@ -6,7 +6,7 @@ const CONFIG = {
   // Maximun diameter of the dot in px
   maxDotDiameter: 100,
   // Game speed in px per second (speed = (5 * 10)px)
-  initSpeed: 5,
+  initSpeed: 50,
   // Frequency to push dot in ms (1000ms = 1s)
   frequency: 1000
 }
@@ -27,12 +27,15 @@ class Game {
     this.c = this.canvas.getContext("2d");
     // Slider element
     this.slider = document.getElementById("speedSlider");
+    this.speedElement = document.getElementById("speed");
     // Current speed of the game
     this.speed = CONFIG.initSpeed;
+    this.slider.value = this.speed / 10;
+    this.speedElement.innerHTML = this.speed;
     this.setCanvasSize();
     this.bindResize();
     this.bindSlider();
-    this.bindBlur();
+    // this.bindBlur();
   }
 
   // Utility method to find random numbers
@@ -48,7 +51,7 @@ class Game {
 
   bindResize() {
     // Recalculate the canvas dimensions on browser resize (responsive support)
-    window.addEventListener('resize', () => game.setCanvasSize());
+    window.addEventListener('resize', () => this.setCanvasSize());
   }
 
   randomColor() {
@@ -58,16 +61,15 @@ class Game {
 
   // Slider event to control the speed of the game
   bindSlider() {
-    this.slider.oninput = () => this.speed = this.slider.value
+    this.slider.oninput = () => {
+      this.speed = this.slider.value * 10;
+      this.speedElement.innerHTML = this.speed;
+    }
   }
 
   bindBlur() {
     // Pause the game once out of focus
     window.addEventListener('blur', () => this.isPlaying = false)
-  }
-
-  removeDot(index) {
-    this.dots.splice(index, 1);
   }
 
   handleDotClick(dot, index) {
@@ -116,20 +118,22 @@ class Dot {
 }
 
 function start() {
+  const pushDot = () => {
+    // Check whether game is on before adding new dot
+    if (game.isPlaying) {
+      game.dots.push(new Dot());
+    }
+    setTimeout(pushDot, CONFIG.frequency);
+  };
   document.getElementById('startBtn').style.display = 'none';
   game.isPlaying = true;
   game.dots.push(new Dot())
   animate();
 
   // Push dot every second
-  setInterval(function () {
-    // Check whether game is on before adding new dot
-    if (game.isPlaying) {
-      game.dots.push(new Dot());
-    }
-  }, CONFIG.frequency);
+  setTimeout(pushDot, CONFIG.frequency);
 
-  window.addEventListener('click', () => {
+  game.canvas.addEventListener('click', () => {
     game.mouseX = event.clientX;
     game.mouseY = event.clientY;
   });
@@ -147,8 +151,8 @@ function animate() {
   game.dots.forEach((dot, index) => {
     dot.update();
     // Speed range is 10px ~ 100px per second based on the configuration.
-    // requestAnimationFrame repaint every 1/60 seconds. So (y += 1 / 60 * <10 ~ 100>) adds (10 ~ 100) every second
-    dot.y += game.speed / 6;
+    // requestAnimationFrame repaint every 1/60 seconds. So (y += speed / 60 * <10 ~ 100>) adds (10 ~ 100) every second
+    dot.y += game.speed / 60;
 
     game.handleDotClick(dot, index);
   });

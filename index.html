@@ -9,14 +9,39 @@
 </head>
 
 <body>
+  <header class="banner-container">
+    <div class="banner">
+
+      <!-- Score -->
+      <div class="element">
+        <div class="label">SCORE</div>
+        <div id="score" class="number">0</div>
+        <div class="label l-h-0">coins</div>
+      </div>
+
+      <!-- Slider -->
+      <div class="element">
+        <div style="width: 100%">
+          <input type="range" min="1" max="10" value="5" id="speedSlider" class="slider">
+        </div>
+      </div>
+
+      <!-- Speed -->
+      <div class="element">
+        <div class="label">SPEED</div>
+        <div id="speed" class="number">0</div>
+        <div class="label l-h-0">px/s</div>
+      </div>
+
+    </div>
+  </header>
   <canvas id="canvas"></canvas>
-  <input type="range" min="1" max="10" value="5" id="speedSlider" class="slider">
+
   <button type="button" id="startBtn" class="start-btn" onclick="start()">Start</button>
-  <button type="button" id="controlBtn" class="control-btn" onclick="controlAnimation()">
-    <span id="score">0</span>
-    <img src="play.svg" alt="Play" height="50px" width="50px" />
-  </button>
-  <script type="text/javascript" src="index.js"></script> 
+  <!-- <button type="button" id="controlBtn" class="control-btn" onclick="controlAnimation()"> -->
+  <!-- <img src="play.svg" alt="Play" height="50px" width="50px" /> -->
+  <!-- </button> -->
+  <script type="text/javascript" src="index.js"></script>
 </body>
 
 </html>
