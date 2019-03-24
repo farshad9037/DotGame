@@ -6,9 +6,21 @@ const CONFIG = {
   // Maximun diameter of the dot in px
   maxDotDiameter: 100,
   // Game speed in px per second (speed = (5 * 10)px)
-  initSpeed: 50,
+  initSpeed: 10,
   // Frequency to push dot in ms (1000ms = 1s)
-  frequency: 1000
+  frequency: 1000,
+  colors: {
+    10: '#FFFFFF',
+    20: 'rgba(255, 0, 0, 0.9)',
+    30: 'rgba(255, 0, 255, 0.8)',
+    40: 'rgba(0, 128, 0, 0.7)',
+    50: 'rgba(255, 255, 255, 0.6)',
+    60: 'rgba(205, 92, 92, 0.5)',
+    70: 'rgba(128, 0, 0, 0.4)',
+    80: 'rgba(47, 79, 79, 0.4)',
+    90: 'rgba(75, 0 , 130, 0.4)',
+    100: 'rgba(255, 255, 255, 0.3)',
+  }
 }
 
 class Game {
@@ -18,17 +30,14 @@ class Game {
     // List of all dots
     this.dots = [];
     // X co-ordinate of click - defaults to 0
-    this.mouseX = 0;
-    // Y co-ordinate of click - defaults to 0
-    this.mouseY = 0;
+    this.clickedPos = { x: 0, y: 0 };
     // Total score
     this.score = 0;
+    this.scoreElement = document.getElementById('score');
     this.canvas = document.getElementById("canvas");
-    this.c = this.canvas.getContext("2d");
-    // Slider element
+    this.ctx = this.canvas.getContext("2d");
     this.slider = document.getElementById("speedSlider");
     this.speedElement = document.getElementById("speed");
-    // Current speed of the game
     this.speed = CONFIG.initSpeed;
     this.slider.value = this.speed / 10;
     this.speedElement.innerHTML = this.speed;
@@ -56,7 +65,7 @@ class Game {
 
   randomColor() {
     // Random r,g,b value has been calculated
-    return `rgb(${Math.round(Math.random() * 250)}, ${Math.round(Math.random() * 250)}, ${Math.round(Math.random() * 250)})`;
+    return `rgba(${Math.round(Math.random() * 250)}, ${Math.round(Math.random() * 250)}, ${Math.round(Math.random() * 250)}, 0.7)`;
   }
 
   // Slider event to control the speed of the game
@@ -72,20 +81,18 @@ class Game {
     window.addEventListener('blur', () => this.isPlaying = false)
   }
 
-  handleDotClick(dot, index) {
+  handleDotClick(dot, index, currentClick) {
     // Logic to find clicked dot
-    if (this.mouseX > dot.x - dot.radius &&
-      this.mouseX < dot.x + dot.radius &&
-      this.mouseY > dot.y - dot.radius &&
-      this.mouseY < dot.y + dot.radius) {
+    if (currentClick.x > dot.x - dot.radius &&
+      currentClick.x < dot.x + dot.radius &&
+      currentClick.y > dot.y - dot.radius &&
+      currentClick.y < dot.y + dot.radius) {
 
-      dot.radius = 0; // Hide clicked dot
-      this.score += dot.points; // Increment score
-      document.getElementById('score').innerHTML = this.score;
-
-      // Reset clicked coordinates. Otherwise future dots of same coordinates will be considered as clicked
-      this.mouseX = 0;
-      this.mouseY = 0;
+      // Hide clicked dot
+      dot.radius = 0;
+      // Increment score
+      this.score += dot.points;
+      this.scoreElement.innerHTML = this.score;
     }
 
     if (dot.y > window.outerHeight + CONFIG.maxDotDiameter) {
@@ -99,8 +106,8 @@ const game = new Game();
 
 class Dot {
   constructor() {
-    this.color = game.randomColor();
     this.radius = game.getRandomdInteger(1, 10) * CONFIG.minDotDiameter / 2;
+    this.color = CONFIG.colors[this.radius * 2];
     // Random X co-ordinate of the dot ranges from 100 to (canvas width - 100)
     this.x = game.getRandomdInteger(CONFIG.maxDotDiameter / 2, game.canvas.width - CONFIG.maxDotDiameter / 2);
     // Initial Y co-ordinate of the dot
@@ -110,10 +117,13 @@ class Dot {
   }
 
   update() {
-    game.c.beginPath();
-    game.c.arc(this.x, this.y, this.radius, 0, 2 * Math.PI);
-    game.c.fillStyle = this.color;
-    game.c.fill();
+    game.ctx.beginPath();
+    game.ctx.arc(this.x, this.y, this.radius, 0, 2 * Math.PI);
+    game.ctx.fillStyle = this.color;
+    game.ctx.fill();
+    game.ctx.lineWidth = 1;
+    game.ctx.strokeStyle = this.color;
+    game.ctx.stroke();
   }
 }
 
@@ -125,10 +135,6 @@ function start() {
     }
     setTimeout(pushDot, CONFIG.frequency);
   };
-  const onClick = () => {
-    game.mouseX = event.clientX;
-    game.mouseY = event.clientY;
-  };
 
   document.getElementById('startBtn').style.display = 'none';
   game.isPlaying = true;
@@ -138,11 +144,17 @@ function start() {
   // Push dot every second
   setTimeout(pushDot, CONFIG.frequency);
 
-  game.canvas.addEventListener('click', onClick);
-  game.canvas.addEventListener("touchstart", onClick);
+  // Need to add touch event for mobile devices
+  game.canvas.addEventListener('mousedown', () => {
+    game.clickedPos = { x: event.clientX, y: event.clientY };
+  }, false);
 }
 
 function animate() {
+  const currentClick = JSON.parse(JSON.stringify(game.clickedPos));
+  // Reset clicked coordinates. Otherwise future dots of same coordinates will be considered as clicked
+  game.clickedPos = { x: 0, y: 0 };
+
   if (!game.isPlaying) {
     // Pause the game
     cancelAnimationFrame(animate);
@@ -150,14 +162,14 @@ function animate() {
   }
 
   requestAnimationFrame(animate); // Continue animation if game is on.
-  game.c.clearRect(0, 0, game.canvas.width, game.canvas.height);
+  game.ctx.clearRect(0, 0, game.canvas.width, game.canvas.height);
   game.dots.forEach((dot, index) => {
     dot.update();
     // Speed range is 10px ~ 100px per second based on the configuration.
     // requestAnimationFrame repaint every 1/60 seconds. So (y += speed / 60 * <10 ~ 100>) adds (10 ~ 100) every second
     dot.y += game.speed / 60;
 
-    game.handleDotClick(dot, index);
+    game.handleDotClick(dot, index, currentClick);
   });
 }
 
