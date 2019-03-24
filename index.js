@@ -6,11 +6,11 @@ const CONFIG = {
   // Maximun diameter of the dot in px
   maxDotDiameter: 100,
   // Game speed in px per second (speed = (5 * 10)px)
-  initSpeed: 10,
+  initSpeed: 50,
   // Frequency to push dot in ms (1000ms = 1s)
   frequency: 1000,
   colors: {
-    10: '#FFFFFF',
+    10: 'rgba(255, 255, 255, 1)',
     20: 'rgba(255, 0, 0, 0.9)',
     30: 'rgba(255, 0, 255, 0.8)',
     40: 'rgba(0, 128, 0, 0.7)',
@@ -29,7 +29,7 @@ class Game {
     this.isPlaying = false;
     // List of all dots
     this.dots = [];
-    // X co-ordinate of click - defaults to 0
+    // Co-ordinates of clicked position
     this.clickedPos = { x: 0, y: 0 };
     // Total score
     this.score = 0;
@@ -38,6 +38,8 @@ class Game {
     this.ctx = this.canvas.getContext("2d");
     this.slider = document.getElementById("speedSlider");
     this.speedElement = document.getElementById("speed");
+    this.pauseImage = document.getElementById("pause");
+    this.pauseLabel = document.getElementById("pauseLabel")
     this.speed = CONFIG.initSpeed;
     this.slider.value = this.speed / 10;
     this.speedElement.innerHTML = this.speed;
@@ -61,11 +63,6 @@ class Game {
   bindResize() {
     // Recalculate the canvas dimensions on browser resize (responsive support)
     window.addEventListener('resize', () => this.setCanvasSize());
-  }
-
-  randomColor() {
-    // Random r,g,b value has been calculated
-    return `rgba(${Math.round(Math.random() * 250)}, ${Math.round(Math.random() * 250)}, ${Math.round(Math.random() * 250)}, 0.7)`;
   }
 
   // Slider event to control the speed of the game
@@ -121,9 +118,6 @@ class Dot {
     game.ctx.arc(this.x, this.y, this.radius, 0, 2 * Math.PI);
     game.ctx.fillStyle = this.color;
     game.ctx.fill();
-    game.ctx.lineWidth = 1;
-    game.ctx.strokeStyle = this.color;
-    game.ctx.stroke();
   }
 }
 
@@ -138,6 +132,7 @@ function start() {
 
   document.getElementById('startBtn').style.display = 'none';
   game.isPlaying = true;
+  game.pauseImage.src = 'pause.svg';
   game.dots.push(new Dot())
   animate();
 
@@ -175,6 +170,14 @@ function animate() {
 
 function controlAnimation() {
   game.isPlaying = !game.isPlaying; // Toggle game status
+  game.clickedPos = { x: 0, y: 0 };
+  if (game.isPlaying) {
+    game.pauseImage.src = 'pause.svg';
+    game.pauseLabel.innerHTML = 'pause';
+  } else {
+    game.pauseImage.src = 'play.svg';
+    game.pauseLabel.innerHTML = 'play';
+  }
   animate(); // Handle animations based on game status
 }
 

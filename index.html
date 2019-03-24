@@ -11,44 +11,43 @@
 <body>
   <header class="wrapper">
     <!-- Score -->
-    <div class="child-wrapper">
-      <div class="element">
-        <div class="label">SCORE</div>
-        <div id="score" class="number">0</div>
-        <div class="label l-h-0">coins</div>
-      </div>
+    <div class="flex flex-column p-10 center">
+      <span class="label">SCORE</span>
+      <span id="score" class="number">0</span>
+      <span class="label l-h-0">coins</span>
     </div>
 
-    <div class="child-wrapper">
-      <div class="element">
-        <button type="button" id="controlBtn" class="control-btn" onclick="controlAnimation()">Pause</button>
-      </div>
-    </div>
-
-    <div class="child-wrapper">
-        <div class="element">
-          <button type="button" class="control-btn" onclick="controlAnimation()">Play</button>
+    <div class="flex p-10 center control-border">
+      <!-- Play button -->
+      <div role="button" id="controlBtn" class="control-btn" onclick="controlAnimation()">
+        <div class="l-h-0">
+          <img id="pause" src="play.svg" width="30" height="30" />
         </div>
+        <span id="pauseLabel" class="label l-h-0">play</span>
       </div>
+
+      <!-- Restart button -->
+      <div role="button" id="restart" class="control-btn" onclick="controlAnimation()">
+        <div class="l-h-0">
+          <img id="pause" src="restart.svg" width="30" height="30" />
+        </div>
+        <span class="label l-h-0">restart</span>
+      </div>
+    </div>
 
     <!-- Speed -->
-    <div class="child-wrapper">
-      <div class="element">
-        <span class="label">SPEED</span>
-        <span id="speed" class="number">0</span>
-        <span class="label">px/s</span>
-        <div>
-          <input type="range" min="1" max="10" value="5" id="speedSlider" class="slider">
-        </div>
+    <div class="p-10 center">
+      <span class="label">SPEED</span>
+      <span id="speed" class="number">0</span>
+      <span class="label">px/s</span>
+      <div>
+        <input type="range" min="1" max="10" value="5" id="speedSlider" class="slider">
       </div>
     </div>
   </header>
   <canvas id="canvas"></canvas>
 
   <button type="button" id="startBtn" class="start-btn" onclick="start()">Start</button>
-  <!-- <button type="button" id="controlBtn" class="control-btn" onclick="controlAnimation()"> -->
-  <!-- <img src="play.svg" alt="Play" height="50px" width="50px" /> -->
-  <!-- </button> -->
   <script type="text/javascript" src="index.js"></script>
 </body>
 
