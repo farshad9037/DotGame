@@ -85,3 +85,7 @@ body {
   border: 1px solid rgba(0, 0, 0, 0.1);
   border-width: 0 1px;
 }
+
+.m-width {
+  min-width: 8.333vw;
+}
