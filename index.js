@@ -33,16 +33,16 @@ class Game {
     this.clickedPos = { x: 0, y: 0 };
     // Total score
     this.score = 0;
+    this.speed = CONFIG.initSpeed;
     this.scoreElement = document.getElementById('score');
     this.canvas = document.getElementById("canvas");
     this.ctx = this.canvas.getContext("2d");
     this.slider = document.getElementById("speedSlider");
     this.speedElement = document.getElementById("speed");
+    this.speedElement.innerHTML = this.speed;
     this.pauseImage = document.getElementById("pause");
     this.pauseLabel = document.getElementById("pauseLabel")
-    this.speed = CONFIG.initSpeed;
     this.slider.value = this.speed / 10;
-    this.speedElement.innerHTML = this.speed;
     this.setCanvasSize();
     this.bindResize();
     this.bindSlider();
@@ -169,7 +169,8 @@ function animate() {
 }
 
 function controlAnimation() {
-  game.isPlaying = !game.isPlaying; // Toggle game status
+  // Toggle game status
+  game.isPlaying = !game.isPlaying;
   game.clickedPos = { x: 0, y: 0 };
   if (game.isPlaying) {
     game.pauseImage.src = 'pause.svg';
@@ -179,6 +180,15 @@ function controlAnimation() {
     game.pauseLabel.innerHTML = 'play';
   }
   animate(); // Handle animations based on game status
+}
+
+function restart() {
+  game.dots = [];
+  game.score = 0;
+  game.scoreElement.innerHTML = 0;
+  game.slider.value = CONFIG.initSpeed / 10;
+  game.speed = CONFIG.initSpeed;
+  game.speedElement.innerHTML = CONFIG.initSpeed;
 }
 
 
