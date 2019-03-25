@@ -38,7 +38,7 @@ class Game {
   }
 
   setCanvasSize() { // Set the dimensions of canvas
-    canvas.width = window.outerWidth;
+    canvas.width = window.innerWidth;
     canvas.height = window.outerHeight;
   }
 
@@ -53,10 +53,13 @@ class Game {
   }
 
   handleGameStatus() {
-    const status = this.isPlaying ? 'pause' : 'play';
-
-    pauseImage.src = `${status}.svg`;
-    pauseLabel.innerHTML = status;
+    if (this.isPlaying) {
+      pauseImage.src = 'pause.svg';
+      pauseLabel.innerHTML = 'pause';
+    } else {
+      pauseImage.src = 'play.svg';
+      pauseLabel.innerHTML = 'play';
+    }
   }
 
   bindSliderEvent() { // Slider event to control the speed of the game
@@ -148,7 +151,7 @@ class Game {
         scoreEl.innerHTML = this.score;
       }
 
-      if (dotY > canvas.height + CONFIG.maxDotDiameter) {
+      if (dotY > window.outerHeight + CONFIG.maxDotDiameter) {
         this.dots.splice(index, 1);
       }
     });
@@ -211,6 +214,4 @@ function controlAnimation() {
 function restart() {
   game.restart();
 }
-
-
 
