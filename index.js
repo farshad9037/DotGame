@@ -3,10 +3,10 @@
 const CONFIG = {
   minDotDiameter: 10, // Minimum diameter of the dot in px
   maxDotDiameter: 100, // Maximun diameter of the dot in px
-  initLevel: 10, // Game level (speed = (5 * 10)px/s)
+  initLevel: 5, // Game level (speed = (5 * 10)px/s)
   frequency: 1000, // Frequency to push dot in ms (1000ms = 1s)
   maxLostCount: 10, // Count of maximum lost dot for game over
-  colors: {
+  colors: { // Configure dot colors {radius: color}
     10: 'rgba(255, 255, 255, 1)',
     20: 'rgba(255, 0, 0, 0.9)',
     30: 'rgba(255, 0, 255, 0.8)',
@@ -32,10 +32,7 @@ class Game {
   init() {
     this.setCanvasSize();
     this.bindResize();
-    this.bindSliderEvent();
-    this.bindBlur();
-    slider.value = CONFIG.initLevel;
-    levelEl.innerHTML = CONFIG.initLevel;
+    this.setSliderValue(CONFIG.initLevel);
   }
 
   setCanvasSize() { // Set the dimensions of canvas
@@ -47,25 +44,28 @@ class Game {
     window.addEventListener('resize', () => this.setCanvasSize(), false); // Recalculate canvas size on browser resize (responsive support)
   }
 
+  setSliderValue(value) {
+    slider.value = value;
+    levelEl.innerHTML = value;
+  }
+
   bindMousedown() {
     canvas.addEventListener('mousedown', () => { // TODO: bind touch event for mobile devices
       this.setClickedPos(event.clientX, event.clientY);
     }, false);
   }
 
-  handleGameStatus() {
-    if (this.isPlaying) {
-      pauseImage.src = 'pause.svg';
-      pauseLabel.innerHTML = 'pause';
-    } else {
-      pauseImage.src = 'play.svg';
-      pauseLabel.innerHTML = 'play';
-    }
+  bindSliderEvent() { // Slider event to control the speed of the game
+    slider.oninput = () => this.setSliderValue(slider.value)
   }
 
-  bindSliderEvent() { // Slider event to control the speed of the game
-    slider.oninput = () => {
-      levelEl.innerHTML = slider.value;
+  handleGameStatus() {
+    if (this.isPlaying) {
+      pauseImage.src = 'https://cdn.glitch.com/27f1b8ee-3948-4cb4-9c64-3854da42f337%2Fpause.svg?1553448788762';
+      pauseLabel.innerHTML = 'pause';
+    } else {
+      pauseImage.src = 'https://cdn.glitch.com/27f1b8ee-3948-4cb4-9c64-3854da42f337%2Fplay.svg?1553448787217';
+      pauseLabel.innerHTML = 'play'
     }
   }
 
@@ -81,11 +81,14 @@ class Game {
   }
 
   restart() {
+    if (!this.isPlaying) { // If game is paused restart the animation
+      this.controlAnimation();
+    }
     this.dots = [];
     this.score = 0;
+    this.lostDotsCount = 0;
     scoreEl.innerHTML = 0;
-    slider.value = CONFIG.initLevel;
-    levelEl.innerHTML = CONFIG.initLevel;
+    this.setSliderValue(CONFIG.initLevel);
   }
 
   controlAnimation() {
@@ -103,10 +106,12 @@ class Game {
   };
 
   start() {
-    document.getElementById('cover').style.display = 'none';
+    this.isPlaying = true;
+    coverEl.style.display = 'none';
     headerEl.style.display = 'flex';
     this.bindMousedown();
-    this.isPlaying = true;
+    this.bindSliderEvent();
+    this.bindBlur();
     this.handleGameStatus();
     this.pushDot(); // Push dot every second
   }
@@ -126,7 +131,7 @@ class Game {
       dot.update();
 
       // Speed range is 10px ~ 100px per second based on the configuration.
-      // requestAnimationFrame repaint every 1/60 seconds. So (y += speed / 60 * <10 ~ 100>) adds (10 ~ 100) every second
+      // requestAnimationFrame repaint every 1/60 seconds. So (y += slider.value / 60 * <10 ~ 100>) adds (10 ~ 100) every second
       dot.y += slider.value / 6;
 
       if (curX > dotX - radius && curX < dotX + radius && curY > dotY - radius && curY < dotY + radius) { // Logic to find clicked dot
@@ -188,6 +193,7 @@ const slider = document.getElementById("levelSlider");
 const levelEl = document.getElementById("level");
 const pauseImage = document.getElementById("pause");
 const pauseLabel = document.getElementById("pauseLabel");
+const coverEl = document.getElementById('cover');
 
 game.init();
 
