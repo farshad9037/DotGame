@@ -120,6 +120,8 @@ class Game {
   };
 
   start() {
+    document.getElementById('startScreen').style.display = 'none';
+    headerEl.style.visibility = 'visible';
     this.bindMousedown();
     startBtnEl.style.display = 'none';
     this.isPlaying = true;
@@ -181,6 +183,7 @@ class Dot {
 }
 
 const game = new Game();
+const headerEl = document.getElementById('header');
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
 const scoreEl = document.getElementById('score');
@@ -188,7 +191,7 @@ const slider = document.getElementById("speedSlider");
 const speedEl = document.getElementById("speed");
 const pauseImage = document.getElementById("pause");
 const pauseLabel = document.getElementById("pauseLabel");
-const startBtnEl = document.getElementById('startBtn')
+const startBtnEl = document.getElementById('startBtn');
 
 game.init();
 

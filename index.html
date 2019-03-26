@@ -9,7 +9,7 @@
 </head>
 
 <body>
-  <header class="wrapper">
+  <header id="header" class="wrapper">
     <!-- Score -->
     <div class="flex flex-column p-10 center m-width">
       <span class="label">SCORE</span>
@@ -37,17 +37,26 @@
 
     <!-- Speed -->
     <div class="p-10 center">
-      <span class="label">SPEED</span>
-      <span id="speed" class="number">0</span>
-      <span class="label">px/s</span>
+      <span class="label">LEVEL</span>
+      <span id="speed" class="number">1</span>
       <div>
         <input type="range" min="1" max="10" value="5" id="speedSlider" class="slider">
       </div>
     </div>
   </header>
   <canvas id="canvas"></canvas>
+  <div id="startScreen" class="flex flex-column overlay center">
+    <div>
+      <img src="logo.png" width="120" />
+    </div>
+    <div class="start-image">
+        <div role="button" id="startBtn" class="start-btn" onclick="start()">
+          <img src="playgame.png" width="120">
+        </div>
+      <img src="file:///Users/farshad/Downloads/bounce2.gif" class="responsive" />
+    </div>
+  </div>
 
-  <button type="button" id="startBtn" class="start-btn" onclick="start()">Start</button>
   <script type="text/javascript" src="index.js"></script>
 </body>
 

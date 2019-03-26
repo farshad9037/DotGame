@@ -4,9 +4,12 @@
 
 body {
   background-color: #55b6b4;
-  /* background: #55b6b4 url("file:///Users/farshad/Downloads/bounce2.gif") no-repeat fixed center;  */
   margin: 0px;
   overflow: hidden;
+}
+
+header {
+  visibility: hidden;
 }
 
 .wrapper {
@@ -23,22 +26,16 @@ body {
   width: 100%;
 }
 
-.start-btn {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-}
-
 .slider {
   -webkit-appearance: none;
   appearance: none;
   border-radius: 5px;
-  height: 0.5em;
+  height: 5px;
   background: rgba(0, 0, 0, 0.5);
   outline: none;
-  /* opacity: 0.7; */
-  -webkit-transition: .2s;
-  transition: opacity .2s;
+  opacity: 0.7;
+  -webkit-transition: .1s;
+  transition: opacity .1s;
 }
 
 .slider:hover {
@@ -80,6 +77,10 @@ body {
   flex-direction: column;
 }
 
+.flex-row {
+  flex-direction: row;
+}
+
 .p-10 {
   padding: 10px;
 }
@@ -95,4 +96,37 @@ body {
 
 .m-width {
   min-width: 8.333vw;
+}
+
+.overlay {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  top: 0; 
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 2;
+  padding: 10px;
+}
+
+.start-btn {
+  position: absolute;
+  top: 20%;
+  left: calc(50% - 60px);
+}
+
+.responsive {
+  max-width: 100%;
+  max-height: 100%;
+  height: auto;
+}
+
+.center {
+  align-items: center;
+  justify-content: center;
+}
+
+.start-image {
+  position: relative;
 }
