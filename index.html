@@ -9,7 +9,22 @@
 </head>
 
 <body>
-  <header id="header" class="wrapper">
+
+  <!-- Start screen -->
+  <div id="cover" class="flex flex-column overlay center">
+    <div>
+      <img src="logo.png" width="120" />
+    </div>
+    <div class="start-image">
+      <div role="button" class="start-btn" onclick="start()">
+        <img src="playgame.png" width="120">
+      </div>
+      <img src="file:///Users/farshad/Downloads/bounce2.gif" class="responsive" />
+    </div>
+  </div>
+
+  <!-- Header -->
+  <div id="header" class="header">
     <!-- Score -->
     <div class="flex flex-column p-10 center m-width">
       <span class="label">SCORE</span>
@@ -36,24 +51,33 @@
     </div>
 
     <!-- Speed -->
-    <div class="p-10 center">
+    <div class="center">
       <span class="label">LEVEL</span>
-      <span id="speed" class="number">1</span>
+      <span id="level" class="number">1</span>
       <div>
-        <input type="range" min="1" max="10" value="5" id="speedSlider" class="slider">
+        <input type="range" min="1" max="10" value="5" id="levelSlider" class="slider">
       </div>
     </div>
-  </header>
+  </div>
+
+  <!-- Canvas -->
   <canvas id="canvas"></canvas>
-  <div id="startScreen" class="flex flex-column overlay center">
+
+  <!-- Game over -->
+  <div id="gameOver" class="flex-column overlay center game-over">
     <div>
-      <img src="logo.png" width="120" />
+      <img src="gameover.png" width="200" />
     </div>
-    <div class="start-image">
-        <div role="button" id="startBtn" class="start-btn" onclick="start()">
-          <img src="playgame.png" width="120">
-        </div>
-      <img src="file:///Users/farshad/Downloads/bounce2.gif" class="responsive" />
+    <div>
+      <span>Your score: </span>
+      <span id="gameOverScore">0</span>
+    </div>
+    <!-- Restart button -->
+    <div role="button" class="control-btn" onclick="window.location.reload()">
+      <div class="l-h-0">
+        <img id="pause" src="restart.svg" width="30" height="30" />
+      </div>
+      <span class="label l-h-0">Try again</span>
     </div>
   </div>
 

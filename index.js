@@ -3,8 +3,9 @@
 const CONFIG = {
   minDotDiameter: 10, // Minimum diameter of the dot in px
   maxDotDiameter: 100, // Maximun diameter of the dot in px
-  initSpeed: 50, // Game speed in px per second (speed = (5 * 10)px)
+  initLevel: 10, // Game level (speed = (5 * 10)px/s)
   frequency: 1000, // Frequency to push dot in ms (1000ms = 1s)
+  maxLostCount: 10, // Count of maximum lost dot for game over
   colors: {
     10: 'rgba(255, 255, 255, 1)',
     20: 'rgba(255, 0, 0, 0.9)',
@@ -25,16 +26,16 @@ class Game {
     this.dots = []; // List of all dots
     this.clickedPos = { x: 0, y: 0 }; // Co-ordinates of clicked position
     this.score = 0; // Total score
-    this.speed = CONFIG.initSpeed;
+    this.lostDotsCount = 0; // count of lost dots
   }
 
   init() {
-    speedEl.innerHTML = CONFIG.initSpeed;
-    slider.value = this.speed / 10;
     this.setCanvasSize();
     this.bindResize();
     this.bindSliderEvent();
     this.bindBlur();
+    slider.value = CONFIG.initLevel;
+    levelEl.innerHTML = CONFIG.initLevel;
   }
 
   setCanvasSize() { // Set the dimensions of canvas
@@ -64,8 +65,7 @@ class Game {
 
   bindSliderEvent() { // Slider event to control the speed of the game
     slider.oninput = () => {
-      this.speed = slider.value * 10;
-      speedEl.innerHTML = this.speed;
+      levelEl.innerHTML = slider.value;
     }
   }
 
@@ -76,22 +76,6 @@ class Game {
     }, false)
   }
 
-  handleDotClick(dot, index, curX, curY) {
-    const dotX = dot.x;
-    const dotY = dot.y;
-    const radius = dot.radius;
-
-    if (curX > dotX - radius && curX < dotX + radius && curY > dotY - radius && curY < dotY + radius) { // Logic to find clicked dot
-      dot.radius = 0; // Hide clicked dot
-      this.score += dot.points; // Increment score
-      scoreEl.innerHTML = this.score;
-    }
-
-    if (dotY > canvas.height + CONFIG.maxDotDiameter) {
-      this.dots.splice(index, 1);
-    }
-  }
-
   setClickedPos(x, y) {
     this.clickedPos = { x, y };
   }
@@ -100,9 +84,8 @@ class Game {
     this.dots = [];
     this.score = 0;
     scoreEl.innerHTML = 0;
-    slider.value = CONFIG.initSpeed / 10;
-    this.speed = CONFIG.initSpeed;
-    speedEl.innerHTML = CONFIG.initSpeed;
+    slider.value = CONFIG.initLevel;
+    levelEl.innerHTML = CONFIG.initLevel;
   }
 
   controlAnimation() {
@@ -120,10 +103,9 @@ class Game {
   };
 
   start() {
-    document.getElementById('startScreen').style.display = 'none';
-    headerEl.style.visibility = 'visible';
+    document.getElementById('cover').style.display = 'none';
+    headerEl.style.display = 'flex';
     this.bindMousedown();
-    startBtnEl.style.display = 'none';
     this.isPlaying = true;
     this.handleGameStatus();
     this.pushDot(); // Push dot every second
@@ -145,18 +127,32 @@ class Game {
 
       // Speed range is 10px ~ 100px per second based on the configuration.
       // requestAnimationFrame repaint every 1/60 seconds. So (y += speed / 60 * <10 ~ 100>) adds (10 ~ 100) every second
-      dot.y += game.speed / 60;
+      dot.y += slider.value / 6;
 
       if (curX > dotX - radius && curX < dotX + radius && curY > dotY - radius && curY < dotY + radius) { // Logic to find clicked dot
         dot.radius = 0; // Hide clicked dot
         this.score += dot.points; // Increment score
         scoreEl.innerHTML = this.score;
+        dot.isClicked = true;
       }
 
       if (dotY > window.outerHeight + CONFIG.maxDotDiameter) {
+        if (!dot.isClicked) {
+          this.lostDotsCount += 1;
+          if (this.lostDotsCount === CONFIG.maxLostCount) {
+            this.gameOver();
+          }
+        }
         this.dots.splice(index, 1);
       }
     });
+  }
+
+  gameOver() {
+    this.isPlaying = false;
+    headerEl.style.display = 'none';
+    document.getElementById('gameOver').style.display = 'flex';
+    document.getElementById('gameOverScore').innerHTML = this.score;
   }
 }
 
@@ -168,6 +164,7 @@ class Dot {
     this.x = this.getRandomdInteger(CONFIG.maxDotDiameter / 2, window.outerWidth - CONFIG.maxDotDiameter / 2);
     this.y = -this.radius; // Initial Y co-ordinate of the dot
     this.points = (CONFIG.maxDotDiameter - this.radius * 2) / 10 + 1; // Points inversely proportional to radius
+    this.isClicked = false;
   }
 
   update() {
@@ -187,11 +184,10 @@ const headerEl = document.getElementById('header');
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
 const scoreEl = document.getElementById('score');
-const slider = document.getElementById("speedSlider");
-const speedEl = document.getElementById("speed");
+const slider = document.getElementById("levelSlider");
+const levelEl = document.getElementById("level");
 const pauseImage = document.getElementById("pause");
 const pauseLabel = document.getElementById("pauseLabel");
-const startBtnEl = document.getElementById('startBtn');
 
 game.init();
 
