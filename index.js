@@ -3,7 +3,7 @@
 const CONFIG = {
   minDotDiameter: 10, // Minimum diameter of the dot in px
   maxDotDiameter: 100, // Maximun diameter of the dot in px
-  initLevel: 5, // Game level (speed = (5 * 10)px/s)
+  initLevel: 3, // Game level (speed = (5 * 10)px/s)
   frequency: 1000, // Frequency to push dot in ms (1000ms = 1s)
   maxLostCount: 10, // Count of maximum lost dot for game over
   colors: { // Configure dot colors {radius: color}
@@ -18,7 +18,7 @@ const CONFIG = {
     90: 'rgba(75, 0 , 130, 0.4)',
     100: 'rgba(255, 255, 255, 0.3)',
   }
-}
+};
 
 class Game {
   constructor() {
@@ -27,6 +27,7 @@ class Game {
     this.clickedPos = { x: 0, y: 0 }; // Co-ordinates of clicked position
     this.score = 0; // Total score
     this.lostDotsCount = 0; // count of lost dots
+    this.dotsInterval = null;
   }
 
   init() {
@@ -41,7 +42,7 @@ class Game {
   }
 
   bindResize() {
-    window.addEventListener('resize', () => this.setCanvasSize(), false); // Recalculate canvas size on browser resize (responsive support)
+    window.addEventListener('resize', this.setCanvasSize, false); // Recalculate canvas size on browser resize (responsive support)
   }
 
   setSliderValue(value) {
@@ -50,7 +51,7 @@ class Game {
   }
 
   bindMousedown() {
-    canvas.addEventListener('mousedown', () => { // TODO: bind touch event for mobile devices
+    canvas.addEventListener('mousedown', () => {
       this.setClickedPos(event.clientX, event.clientY);
     }, false);
   }
@@ -65,7 +66,7 @@ class Game {
       pauseLabel.innerHTML = 'pause';
     } else {
       pauseImage.src = 'https://cdn.glitch.com/27f1b8ee-3948-4cb4-9c64-3854da42f337%2Fplay.svg?1553448787217';
-      pauseLabel.innerHTML = 'play'
+      pauseLabel.innerHTML = 'play';
     }
   }
 
@@ -73,7 +74,7 @@ class Game {
     window.addEventListener('blur', () => {
       this.isPlaying = false;
       this.handleGameStatus();
-    }, false)
+    }, false);
   }
 
   setClickedPos(x, y) {
@@ -92,18 +93,20 @@ class Game {
   }
 
   controlAnimation() {
-    this.isPlaying = !game.isPlaying; // Toggle game status
+    this.isPlaying = !this.isPlaying; // Toggle game status
     this.setClickedPos(0, 0);
     this.handleGameStatus();
     animate(); // Handle animations based on game status
   }
 
-  pushDot = () => {
-    if (this.isPlaying) { // Check whether game is on before adding new dot
-      this.dots.push(new Dot());
-    }
-    setTimeout(this.pushDot, CONFIG.frequency);
-  };
+  pushDotPerSec() { // Push dot every second
+    this.dotsInterval = setInterval(() => {
+      console.log('new');
+      if (this.isPlaying) { // Check whether game is on before adding new dot
+        this.dots.push(new Dot());
+      }
+    }, CONFIG.frequency);
+  }
 
   start() {
     this.isPlaying = true;
@@ -113,7 +116,8 @@ class Game {
     this.bindSliderEvent();
     this.bindBlur();
     this.handleGameStatus();
-    this.pushDot(); // Push dot every second
+    this.dots.push(new Dot());
+    this.pushDotPerSec();
   }
 
   updateDots() {
@@ -123,6 +127,7 @@ class Game {
 
     this.setClickedPos(0, 0);// Reset clicked coordinates. Otherwise future dots of same coordinates will be considered as clicked
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+
     this.dots.forEach((dot, index) => {
       const dotX = dot.x;
       const dotY = dot.y;
@@ -155,11 +160,15 @@ class Game {
 
   gameOver() {
     this.isPlaying = false;
+    clearInterval(this.dotsInterval);
     headerEl.style.display = 'none';
-    document.getElementById('gameOver').style.display = 'flex';
-    document.getElementById('gameOverScore').innerHTML = this.score;
+    gameOverEl.style.display = 'flex';
+    gameOverScoreEl.innerHTML = this.score;
+    canvas.removeEventListener('mousedown', () => {
+      this.setClickedPos(event.clientX, event.clientY);
+    }, false);
   }
-}
+};
 
 class Dot {
   constructor() {
@@ -182,7 +191,7 @@ class Dot {
   getRandomdInteger(min, max) { // Utility method to find random numbers
     return Math.floor(Math.random() * (max - min + 1)) + min;
   }
-}
+};
 
 const game = new Game();
 const headerEl = document.getElementById('header');
@@ -194,6 +203,8 @@ const levelEl = document.getElementById("level");
 const pauseImage = document.getElementById("pause");
 const pauseLabel = document.getElementById("pauseLabel");
 const coverEl = document.getElementById('cover');
+const gameOverEl = document.getElementById('gameOver');
+const gameOverScoreEl = document.getElementById('gameOverScore');
 
 game.init();
 
