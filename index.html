@@ -11,12 +11,12 @@
 <body>
 
   <!-- Start screen -->
-  <div id="cover" class="flex flex-column overlay center">
+  <div id="gameCover" class="cover">
     <div>
       <img src="https://cdn.glitch.com/27f1b8ee-3948-4cb4-9c64-3854da42f337%2Flogo.png?1553621744338" width="120" />
     </div>
-    <div class="start-image">
-      <div role="button" class="start-btn" onclick="start()">
+    <div class="gif">
+      <div role="button" onclick="start()">
         <img src="https://cdn.glitch.com/27f1b8ee-3948-4cb4-9c64-3854da42f337%2Fplaygame.png?1553621752996" width="120">
       </div>
       <img src="https://cdn.glitch.com/27f1b8ee-3948-4cb4-9c64-3854da42f337%2Fbounce.gif?1553621804812" class="responsive" />
@@ -24,25 +24,25 @@
   </div>
 
   <!-- Header -->
-  <div id="header" class="header">
+  <div id="gameHeader" class="header">
     <!-- Score -->
-    <div class="flex flex-column p-10 center m-width">
+    <div class="score">
       <span class="label">SCORE</span>
-      <span id="score" class="number">0</span>
+      <span id="gameScore" class="number">0</span>
       <span class="label l-h-0">coins</span>
     </div>
 
-    <div class="flex p-10 center control-border">
+    <div class="control-buttons">
       <!-- Play button -->
-      <div role="button" id="controlBtn" class="control-btn" onclick="controlAnimation()">
+      <div role="button" onclick="controlAnimation()">
         <div class="l-h-0">
-          <img id="pause" src="https://cdn.glitch.com/27f1b8ee-3948-4cb4-9c64-3854da42f337%2Fplay.svg?1553448787217" width="30" height="30" />
+          <img id="gamePause" src="https://cdn.glitch.com/27f1b8ee-3948-4cb4-9c64-3854da42f337%2Fplay.svg?1553448787217" width="30" height="30" />
         </div>
-        <span id="pauseLabel" class="label l-h-0">play</span>
+        <span id="gamePauseLabel" class="label l-h-0">play</span>
       </div>
 
       <!-- Restart button -->
-      <div role="button" class="control-btn" onclick="restart()">
+      <div role="button" onclick="restart()">
         <div class="l-h-0">
           <img src="https://cdn.glitch.com/27f1b8ee-3948-4cb4-9c64-3854da42f337%2Frestart.svg?1553448796433" width="30" height="30" />
         </div>
@@ -50,21 +50,21 @@
       </div>
     </div>
 
-    <!-- Speed -->
-    <div class="center">
+    <!-- Level -->
+    <div class="level text-center">
       <span class="label">LEVEL</span>
-      <span id="level" class="number">1</span>
+      <span id="gameLevel" class="number">1</span>
       <div>
-        <input type="range" min="1" max="10" value="5" id="levelSlider" class="slider">
+        <input type="range" min="1" max="10" value="5" id="gameLevelSlider" class="slider">
       </div>
     </div>
   </div>
 
   <!-- Canvas -->
-  <canvas id="canvas"></canvas>
+  <canvas id="gameCanvas"></canvas>
 
   <!-- Game over -->
-  <div id="gameOver" class="flex-column overlay center game-over">
+  <div id="gameOver" class="game-over">
     <div>
       <img src="https://cdn.glitch.com/27f1b8ee-3948-4cb4-9c64-3854da42f337%2Fthumbnails%2Fgameover.png?1553621747369" width="200" />
     </div>
@@ -73,7 +73,7 @@
       <span id="gameOverScore">0</span>
     </div>
     <!-- Restart button -->
-    <div role="button" class="control-btn" onclick="window.location.reload()">
+    <div role="button" onclick="window.location.reload()">
       <div class="l-h-0">
         <img src="https://cdn.glitch.com/27f1b8ee-3948-4cb4-9c64-3854da42f337%2Frestart.svg?1553448796433" width="30" height="30" />
       </div>

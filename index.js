@@ -3,20 +3,21 @@
 const CONFIG = {
   minDotDiameter: 10, // Minimum diameter of the dot in px
   maxDotDiameter: 100, // Maximun diameter of the dot in px
-  initLevel: 3, // Game level (speed = (5 * 10)px/s)
+  initLevel: 1, // Game level (speed = (1 * 10)px/s)
   frequency: 1000, // Frequency to push dot in ms (1000ms = 1s)
+  gameLevelFreq: 100, // Game autospeed increase frequency
   maxLostCount: 10, // Count of maximum lost dot for game over
   colors: { // Configure dot colors {radius: color}
     10: 'rgba(255, 255, 255, 1)',
     20: 'rgba(255, 0, 0, 0.9)',
-    30: 'rgba(255, 0, 255, 0.8)',
+    30: 'rgba(31, 47, 155, 0.8)',
     40: 'rgba(0, 128, 0, 0.7)',
-    50: 'rgba(255, 255, 255, 0.6)',
-    60: 'rgba(205, 92, 92, 0.5)',
+    50: 'rgba(244, 205, 9, 0.6)',
+    60: 'rgba(71, 9, 62, 0.5)',
     70: 'rgba(128, 0, 0, 0.4)',
-    80: 'rgba(47, 79, 79, 0.4)',
-    90: 'rgba(75, 0 , 130, 0.4)',
-    100: 'rgba(255, 255, 255, 0.3)',
+    80: 'rgba(9, 18, 71, 0.3)',
+    90: 'rgba(230, 9 , 234, 0.2)',
+    100: 'rgba(12, 12, 12, 0.2)',
   }
 };
 
@@ -101,7 +102,6 @@ class Game {
 
   pushDotPerSec() { // Push dot every second
     this.dotsInterval = setInterval(() => {
-      console.log('new');
       if (this.isPlaying) { // Check whether game is on before adding new dot
         this.dots.push(new Dot());
       }
@@ -118,6 +118,14 @@ class Game {
     this.handleGameStatus();
     this.dots.push(new Dot());
     this.pushDotPerSec();
+  }
+
+  handleGameLevel() {
+    const currLevel = parseInt(slider.value);
+
+    if (currLevel < 10 && (this.score / CONFIG.gameLevelFreq) > currLevel) {
+      this.setSliderValue(currLevel + 1);
+    }
   }
 
   updateDots() {
@@ -142,6 +150,7 @@ class Game {
       if (curX > dotX - radius && curX < dotX + radius && curY > dotY - radius && curY < dotY + radius) { // Logic to find clicked dot
         dot.radius = 0; // Hide clicked dot
         this.score += dot.points; // Increment score
+        this.handleGameLevel();
         scoreEl.innerHTML = this.score;
         dot.isClicked = true;
       }
@@ -194,15 +203,15 @@ class Dot {
 };
 
 const game = new Game();
-const headerEl = document.getElementById('header');
-const canvas = document.getElementById("canvas");
+const headerEl = document.getElementById('gameHeader');
+const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
-const scoreEl = document.getElementById('score');
-const slider = document.getElementById("levelSlider");
-const levelEl = document.getElementById("level");
-const pauseImage = document.getElementById("pause");
-const pauseLabel = document.getElementById("pauseLabel");
-const coverEl = document.getElementById('cover');
+const scoreEl = document.getElementById('gameScore');
+const slider = document.getElementById("gameLevelSlider");
+const levelEl = document.getElementById("gameLevel");
+const pauseImage = document.getElementById("gamePause");
+const pauseLabel = document.getElementById("gamePauseLabel");
+const coverEl = document.getElementById('gameCover');
 const gameOverEl = document.getElementById('gameOver');
 const gameOverScoreEl = document.getElementById('gameOverScore');
 
@@ -230,4 +239,3 @@ function controlAnimation() {
 function restart() {
   game.restart();
 }
-
