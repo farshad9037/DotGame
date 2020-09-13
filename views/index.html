@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>Dot Game</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+
+<body>
+
+  <!-- Start screen -->
+  <div id="gameCover" class="cover">
+    <div>
+      <img src="https://cdn.glitch.com/27f1b8ee-3948-4cb4-9c64-3854da42f337%2Flogo.png?1553621744338" width="120" />
+    </div>
+    <div class="gif">
+      <div role="button" id="playGameBtn">
+        <img src="https://cdn.glitch.com/27f1b8ee-3948-4cb4-9c64-3854da42f337%2Fplaygame.png?1553621752996" width="120">
+      </div>
+      <img src="https://cdn.glitch.com/27f1b8ee-3948-4cb4-9c64-3854da42f337%2Fbounce.gif?1553621804812" class="responsive" />
+    </div>
+  </div>
+
+  <!-- Header -->
+  <div id="gameHeader" class="header">
+    <!-- Score -->
+    <div class="score">
+      <span class="label">SCORE</span>
+      <span id="gameScore" class="number">0</span>
+      <span class="label l-h-0">coins</span>
+    </div>
+
+    <div class="control-buttons">
+      <!-- Play button -->
+      <div role="button" id="gameControl">
+        <div class="l-h-0">
+          <img id="gamePause" src="https://cdn.glitch.com/27f1b8ee-3948-4cb4-9c64-3854da42f337%2Fplay.svg?1553448787217" width="30" height="30" />
+        </div>
+        <span id="gamePauseLabel" class="label l-h-0">play</span>
+      </div>
+
+      <!-- Restart button -->
+      <div role="button" id="restartIcon">
+        <div class="l-h-0">
+          <img src="https://cdn.glitch.com/27f1b8ee-3948-4cb4-9c64-3854da42f337%2Frestart.svg?1553448796433" width="30" height="30" />
+        </div>
+        <span class="label l-h-0">restart</span>
+      </div>
+    </div>
+
+    <!-- Level -->
+    <div class="level text-center">
+      <span class="label">LEVEL</span>
+      <span id="gameLevel" class="number">1</span>
+      <div>
+        <input type="range" min="1" max="10" value="5" id="gameLevelSlider" class="slider">
+      </div>
+    </div>
+  </div>
+
+  <!-- Canvas -->
+  <!-- <canvas id="gameCanvas"></canvas> -->
+
+  <!-- Game over -->
+  <div id="gameOver" class="game-over">
+    <div>
+      <img src="https://cdn.glitch.com/27f1b8ee-3948-4cb4-9c64-3854da42f337%2Fthumbnails%2Fgameover.png?1553621747369" width="200" />
+    </div>
+    <div>
+      <span>Your score: </span>
+      <span id="gameOverScore">0</span>
+    </div>
+    <!-- Restart button -->
+    <div role="button" onclick="window.location.reload()">
+      <div class="l-h-0">
+        <img src="https://cdn.glitch.com/27f1b8ee-3948-4cb4-9c64-3854da42f337%2Frestart.svg?1553448796433" width="30" height="30" />
+      </div>
+      <span class="label l-h-0">Try again</span>
+    </div>
+  </div>
+
+  <script type="module" src="index.js"></script>
+</body>
+
+</html>
