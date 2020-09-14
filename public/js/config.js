@@ -1,7 +1,7 @@
 const CONFIG = {
   minDotDiameter: 10, // Minimum diameter of the dot in px
   maxDotDiameter: 100, // Maximun diameter of the dot in px
-  initLevel: 1, // Game level (speed = (1 * 10)px/s)
+  initLevel: 10, // Game level (speed = (1 * 10)px/s)
   frequency: 1000, // Frequency to push dot in ms (1000ms = 1s)
   gameLevelFreq: 100, // Game autospeed increase frequency
   maxLostCount: 10, // Count of maximum lost dot for game over

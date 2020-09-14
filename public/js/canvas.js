@@ -8,56 +8,74 @@ export default class Canvas {
    * @param {String} width
    */
   constructor() {
-    this.height = window.outerHeight;
-    this.width = window.innerWidth;
-    this.clickedPos = { x: 0, y: 0 }; // Co-ordinates of clicked position
-    this.canvas = null;
+    this._height = window.outerHeight;
+    this._width = window.innerWidth;
+    // Co-ordinates of clicked position
+    this._clickedPos = { x: 0, y: 0 };
+    this._canvas = null;
   }
 
   create() {
-    let canvas = document.createElement('canvas');
-    canvas.height = window.outerHeight;
-    canvas.width = window.innerWidth;
-    document.body.appendChild(canvas);
+    let canvasEle = document.createElement('canvas');
+    canvasEle.height = window.outerHeight;
+    canvasEle.width = window.innerWidth;
+    document.body.appendChild(canvasEle);
+    this._canvas = canvasEle;
 
-    canvas.addEventListener('mousedown', () => {
-      this.clickedPos = { x: event.clientX, y: event.clientY };
+    this._canvas.addEventListener('mousedown', () => {
+      this._clickedPos = { x: event.clientX, y: event.clientY };
     }, false);
 
-    this.canvas = canvas;
-    this.ctx = canvas.getContext("2d");
+    window.addEventListener('resize', () => {
+      this._canvas.height = window.outerHeight;
+      this._canvas.width = window.innerWidth;
+    }, false);
+
+    this._ctx = canvasEle.getContext("2d");
   }
 
-  getContext() {
-    return this.canvas.getContext("2d");
+  get clickedPos() {
+    return this._clickedPos;
   }
 
-  setClickedPos(x, y) {
-    this.clickedPos = { x, y };
+  set clickedPos(value) {
+    this._clickedPos = value;
   }
 
-  getClickedPos(x, y) {
-    return this.clickedPos;
+  get height() {
+    return this._height;
   }
 
   clearRect() {
-    this.ctx.clearRect(0, 0, this.width, this.height);
+    // Reset clicked coordinates. Otherwise future dots of same coordinates will be considered as clicked
+    this._clickedPos = { x: 0, y: 0 };
+    this._ctx.clearRect(0, 0, this._width, this._height);
   }
 
   update(dot) {
     const { x, y, radius, color } = dot;
-    this.ctx.beginPath();
-    this.ctx.arc(x, y, radius, 0, 2 * Math.PI);
-    this.ctx.fillStyle = color;
-    this.ctx.fill();
+    this._ctx.beginPath();
+    this._ctx.arc(x, y, radius, 0, 2 * Math.PI);
+    this._ctx.fillStyle = color;
+    this._ctx.fill();
+    this._ctx.closePath();
   }
 
-  setSize() {
-    this.canvas.style.height = `${window.outerHeight}px`;
-    this.canvas.style.width = `${window.innerWidth}px`;
+  _setSize() {
+    this._canvas.height = window.outerHeight;
+    this._canvas.width = window.innerWidth;
   }
 
-  onMousedown(callback) {
-    canvas.addEventListener('onmousedown', callback, false);
+  $destroy() {
+    this._canvas.removeEventListener('mousedown', () => {
+      this._clickedPos = { x: event.clientX, y: event.clientY };
+    }, false);
+
+    window.removeEventListener('resize', () => {
+      this._canvas.height = window.outerHeight;
+      this._canvas.width = window.innerWidth;
+    }, false);
+
+    document.body.removeChild(this._canvas);
   }
 }

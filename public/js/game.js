@@ -5,8 +5,8 @@ import CONFIG from './config.js';
 
 export default class Game {
   constructor() {
-    this.isPlaying = false; // Whether game is on or pause/off
-    this.level = CONFIG.level;
+    this._isPlaying = false; // Whether game is on or pause/off
+    this._level = CONFIG.level;
     this.dots = []; // List of all dots
     this.clickedPos = { x: 0, y: 0 }; // Co-ordinates of clicked position
     this.score = 0; // Total score
@@ -14,19 +14,23 @@ export default class Game {
     this.dotsInterval = null;
   }
 
-  setIsPlaying(value) {
-    this.isPlaying = value;
+  get isPlaying() {
+    return this._isPlaying;
   }
 
-  getIsPlaying() {
-    return this.isPlaying;
+  set isPlaying(value) {
+    this._isPlaying = value;
   }
 
-  setLevel(value) {
-    this.level = value;
+  get level() {
+    return this._level;
   }
 
-  getLevel() {
-    return this.level;
+  set level(value) {
+    this._level = value;
+  }
+
+  $isLost() {
+    return this.lostDotsCount === CONFIG.maxLostCount
   }
 };

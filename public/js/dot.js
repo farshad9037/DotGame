@@ -14,4 +14,27 @@ export default class Dot {
     this.points = (CONFIG.maxDotDiameter - this.radius * 2) / 10 + 1; // Points inversely proportional to radius
     this.isClicked = false;
   }
+
+  $isClickOnDot(curX, curY) {
+    try {
+      if(isNaN(curX)) throw "curX must be a number";
+      if(isNaN(curY)) throw "curY must be a number";
+    } catch (error) {
+      console.error(error);
+    } finally {
+      const { x, y, radius } = this;
+      return curX > x - radius && curX < x + radius && curY > y - radius && curY < y + radius;
+    }
+  }
+
+  $isOutOfScreen(refHeight) {
+    try {
+      if(isNaN(refHeight)) throw "refHeight is not a number";
+      if(refHeight <= 0) throw "refHeight must be greater than 1";
+    } catch (error) {
+      console.error(error);
+    } finally {
+      return this.y > refHeight + CONFIG.maxDotDiameter
+    }
+  }
 };
