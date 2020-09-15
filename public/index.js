@@ -39,25 +39,23 @@ const restart = () => {
 
 const handleGameStatus = () => {
   if (game.isPlaying) {
-    pauseImage.src = 'https://cdn.glitch.com/27f1b8ee-3948-4cb4-9c64-3854da42f337%2Fpause.svg?1553448788762';
-    pauseLabel.innerHTML = 'pause';
+    pauseImage.src = CONFIG.pause.src;
+    pauseLabel.innerHTML = CONFIG.pause.label;
   } else {
-    pauseImage.src = 'https://cdn.glitch.com/27f1b8ee-3948-4cb4-9c64-3854da42f337%2Fplay.svg?1553448787217';
-    pauseLabel.innerHTML = 'play';
+    pauseImage.src = CONFIG.play.src;
+    pauseLabel.innerHTML = CONFIG.play.label;
   }
 }
 
 const onBlur = () => {
-  // Pause the game once out of focus
   game.isPlaying = false;
   handleGameStatus();
 };
 
 const controlAnimation = () => {
-  game.isPlaying = !game.isPlaying; // Toggle game status
+  game.isPlaying = !game.isPlaying;
   canvas.clickedPos = { x: 0, y: 0 }
   handleGameStatus();
-  // Handle animations based on game status
   animate();
 }
 
@@ -72,12 +70,12 @@ const handleGameLevel = () => {
 const start = () => {
   canvas.create();
   game.isPlaying = true;
+  handleGameStatus();
   coverEl.style.display = 'none';
   headerEl.style.display = 'flex';
   setSliderValue(CONFIG.initLevel);
   pushDotPerSec();
   animate();
-  // Slider event to control the speed of the game
   slider.oninput = () => setSliderValue(slider.value)
   window.addEventListener('blur', onBlur, false);
   gameControl.addEventListener('click', controlAnimation, false);
@@ -100,7 +98,8 @@ const gameOver = () => {
 // Push dot every second
 const pushDotPerSec = () => {
   dotsInterval = setInterval(() => {
-    if (game.isPlaying) { // Check whether game is on before adding new dot
+    // Check whether game is on before adding new dot
+    if (game.isPlaying) {
       dots.push(new Dot());
     }
   }, CONFIG.frequency);
@@ -112,19 +111,14 @@ let dotsInterval = null;
 function animate() {
   const updateDots = () => {
     const { x: curX, y: curY } = canvas.clickedPos;
-    canvas.clearRect();
+    canvas.$clearRect();
   
     dots.forEach((dot, index) => {
-      canvas.update(dot);
-  
-      // Speed range is 10px ~ 100px per second based on the configuration.
-      // requestAnimationFrame repaint every 1/60 seconds. So (y += slider.value / 60 * <10 ~ 100>) adds (10 ~ 100) every second
-      dot.y += slider.value / 6;
+      canvas.$draw(dot);
+      dot.$updateY(Number(slider.value));
   
       if (dot.$isClickOnDot(curX, curY)) {
-        // Pop clicked dot
-        dot.radius = 0;
-        // Increment game score
+        dot.$pop();
         game.score += dot.points;
         handleGameLevel();
         scoreEl.innerHTML = game.score;
@@ -138,17 +132,16 @@ function animate() {
             gameOver();
           }
         }
-        // Remove dot from the dots list
         dots.splice(index, 1);
       }
     });
   }
 
   if (!game.isPlaying) {
-    cancelAnimationFrame(animate); // Pause the game
+    cancelAnimationFrame(animate);
     return;
   }
 
-  requestAnimationFrame(animate); // Continue animation if game is on.
+  requestAnimationFrame(animate);
   updateDots();
 }

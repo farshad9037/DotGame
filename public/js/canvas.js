@@ -46,24 +46,19 @@ export default class Canvas {
     return this._height;
   }
 
-  clearRect() {
+  $clearRect() {
     // Reset clicked coordinates. Otherwise future dots of same coordinates will be considered as clicked
     this._clickedPos = { x: 0, y: 0 };
     this._ctx.clearRect(0, 0, this._width, this._height);
   }
 
-  update(dot) {
-    const { x, y, radius, color } = dot;
+  $draw(dot) {
+    const { _x, _y, _radius, _color } = dot;
     this._ctx.beginPath();
-    this._ctx.arc(x, y, radius, 0, 2 * Math.PI);
-    this._ctx.fillStyle = color;
+    this._ctx.arc(_x, _y, _radius, 0, 2 * Math.PI);
+    this._ctx.fillStyle = _color;
     this._ctx.fill();
     this._ctx.closePath();
-  }
-
-  _setSize() {
-    this._canvas.height = window.outerHeight;
-    this._canvas.width = window.innerWidth;
   }
 
   $destroy() {

@@ -6,13 +6,42 @@ import { getRandomInteger } from './utils.js';
 
 export default class Dot {
   constructor() {
-    this.radius = getRandomInteger(1, 10) * CONFIG.minDotDiameter / 2; // Random radius between 10 and 100
-    this.color = CONFIG.colors[this.radius * 2];
-    // Random X co-ordinate of the dot ranges from 100 to (canvas width - 100)
-    this.x = getRandomInteger(CONFIG.maxDotDiameter / 2, window.outerWidth - CONFIG.maxDotDiameter / 2);
-    this.y = -this.radius; // Initial Y co-ordinate of the dot
-    this.points = (CONFIG.maxDotDiameter - this.radius * 2) / 10 + 1; // Points inversely proportional to radius
-    this.isClicked = false;
+    /** Genereate random radius */
+    this._radius = getRandomInteger(1, 10) * CONFIG.minDotDiameter / 2; // Random radius between 10 and 100
+    /** Pick color from the configuration */
+    this._color = CONFIG.colors[this._radius * 2];
+    /** Random X co-ordinate of the dot ranges from 100 to (canvas width - 100)*/
+    this._x = getRandomInteger(CONFIG.maxDotDiameter / 2, window.outerWidth - CONFIG.maxDotDiameter / 2);
+    /** Initial Y co-ordinate of the dot */ 
+    this._y = -this._radius;
+    /** Points inversely proportional to radius */
+    this._points = (CONFIG.maxDotDiameter - this._radius * 2) / 10 + 1;
+    /** Flag to determine the status of dot */
+    this._isClicked = false;
+  }
+
+  get isClicked() {
+    return this._isClicked;
+  }
+
+  set isClicked(value) {
+    this._isClicked = value;
+  }
+
+  get points() {
+    return this._points;
+  }
+
+  $updateY(sliderValue) {
+    /**
+     * Speed range is 10px ~ 100px per second based on the configuration.
+     * requestAnimationFrame repaint every 1/60 seconds. So (y += slider.value / 60 * <10 ~ 100>) adds (10 ~ 100) every second
+    */
+    this._y += Number(sliderValue) / 6;
+  }
+
+  $pop() {
+    this._radius = 0;
   }
 
   $isClickOnDot(curX, curY) {
@@ -22,8 +51,8 @@ export default class Dot {
     } catch (error) {
       console.error(error);
     } finally {
-      const { x, y, radius } = this;
-      return curX > x - radius && curX < x + radius && curY > y - radius && curY < y + radius;
+      const { _x, _y, _radius } = this;
+      return curX > _x - _radius && curX < _x + _radius && curY > _y - _radius && curY < _y + _radius;
     }
   }
 
@@ -34,7 +63,7 @@ export default class Dot {
     } catch (error) {
       console.error(error);
     } finally {
-      return this.y > refHeight + CONFIG.maxDotDiameter
+      return this._y > refHeight + CONFIG.maxDotDiameter
     }
   }
 };

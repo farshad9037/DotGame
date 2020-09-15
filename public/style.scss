@@ -1,71 +1,42 @@
-// Variables
-$play-game-btn-width: 120px;
-
-// Extends
-%overlay {
-  bottom: 0;
-  height: 100%;
-  left: 0;
-  position: fixed;
-  right: 0;
-  top: 0;
-  width: 100%;
-  z-index: 2;
-}
-
-%center {
-  align-items: center;
-  display: flex;
-  justify-content: center;
-}
-
-%flex-row {
-  @extend %center;
-  flex-direction: row;
-}
-
-%flex-column {
-  @extend %center;
-  flex-direction: column;
-}
-
-// common
-* {
-  box-sizing: border-box;
-}
-
-[role="button"] {
-  cursor: pointer;
-  padding: 5px;
-  text-align: center;
-}
-
-// body
-body {
-  background-color: #55b6b4;
-  margin: 0px;
-  overflow: hidden;
-}
+@import './scss/common';
+@import './scss/variables';
+@import './scss/mixins';
+@import './scss/animations';
 
 .cover {
-  @extend %overlay;
-  @extend %flex-column;
-  padding: 10px;
-  
-  .gif {
-    position: relative;
+  min-height: 100%;
+  background: #55b6b4 url(https://cdn.glitch.com/27f1b8ee-3948-4cb4-9c64-3854da42f337%2Fbounce.gif?1553621804812) no-repeat center;
+  background-size: cover;
+  text-align: center;
+
+  .gameName {
+    color: $darkcyan;
+    font-family: cursive;
+    font-weight: bold;
+    font-size: 4em;
+    padding: 0.67em;
+    text-shadow: 2px 2px $white;
   }
   
-  [role="button"] {
-    left: calc(50% - #{$play-game-btn-width / 2});
-    padding: 0;
-    position: absolute;
-    top: 20%;
+  .playGameBtn {
+    background: 0;
+    border: 0;
+    color: $white;
+    font-size: $play-game-icon-size;
+    outline: none;
+    animation: shake 0.82s cubic-bezier(.36,.07,.19,.97) both;
+    transform: translate3d(0, 0, 0);
+    backface-visibility: hidden;
+    perspective: 1000px;
+
+    &:hover {
+      opacity: 0.8
+    }
   }
 }
 
 .header {
-  @extend %flex-row;
+  @include flex-center;
   background: rgba(0, 0, 0, 0.1);
   display: none;
   justify-content: space-evenly;
@@ -77,7 +48,8 @@ body {
   width: 100%;
   
   .score {
-    @extend %flex-column;
+    @include flex-center;
+    flex-direction: column;
     padding: 10px;
     
     .number {
@@ -134,14 +106,14 @@ body {
 }
 
 .control-buttons {
-  @extend %flex-row;
+  @include flex-center;
   border: 1px solid rgba(0, 0, 0, 0.1);
   border-width: 0 1px;
   padding: 10px;
 }
 
 .game-over {
-  @extend %overlay;
-  @extend %flex-column;
+  @include flex-center;
+  flex-direction: column;
   display: none;
 }
