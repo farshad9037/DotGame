@@ -12,7 +12,7 @@ export default class Dot {
     this._color = CONFIG.colors[this._radius * 2];
     /** Random X co-ordinate of the dot ranges from 100 to (canvas width - 100)*/
     this._x = getRandomInteger(CONFIG.maxDotDiameter / 2, window.outerWidth - CONFIG.maxDotDiameter / 2);
-    /** Initial Y co-ordinate of the dot */ 
+    /** Initial Y co-ordinate of the dot */
     this._y = -this._radius;
     /** Points inversely proportional to radius */
     this._points = (CONFIG.maxDotDiameter - this._radius * 2) / 10 + 1;
@@ -46,8 +46,8 @@ export default class Dot {
 
   $isClickOnDot(curX, curY) {
     try {
-      if(isNaN(curX)) throw "curX must be a number";
-      if(isNaN(curY)) throw "curY must be a number";
+      if (isNaN(curX)) throw "curX must be a number";
+      if (isNaN(curY)) throw "curY must be a number";
     } catch (error) {
       console.error(error);
     } finally {
@@ -58,8 +58,8 @@ export default class Dot {
 
   $isOutOfScreen(refHeight) {
     try {
-      if(isNaN(refHeight)) throw "refHeight is not a number";
-      if(refHeight <= 0) throw "refHeight must be greater than 1";
+      if (isNaN(refHeight)) throw "refHeight is not a number";
+      if (refHeight <= 0) throw "refHeight must be greater than 1";
     } catch (error) {
       console.error(error);
     } finally {

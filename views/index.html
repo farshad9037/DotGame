@@ -29,20 +29,15 @@
 
     <div class="control-buttons">
       <!-- Play button -->
-      <div role="button" id="gameControl">
-        <div class="l-h-0">
-          <img id="gamePause" src="https://cdn.glitch.com/27f1b8ee-3948-4cb4-9c64-3854da42f337%2Fplay.svg?1553448787217" width="30" height="30" />
-        </div>
-        <span id="gamePauseLabel" class="label l-h-0">play</span>
-      </div>
-
-      <!-- Restart button -->
-      <div role="button" id="restartIcon">
-        <div class="l-h-0">
-          <img src="https://cdn.glitch.com/27f1b8ee-3948-4cb4-9c64-3854da42f337%2Frestart.svg?1553448796433" width="30" height="30" />
-        </div>
-        <span class="label l-h-0">restart</span>
-      </div>
+      <button type="button" id="play" aria-label="Play" class="gameControl">
+        <i class="fa fa-play" title="Play" aria-labelledby="play"></i>
+        <span >play</span>
+      </button>
+      <!-- Pause button -->
+      <button type="button" id="pause" aria-label="Pause" class="gameControl">
+        <i class="fa fa-pause" title="Pause" aria-labelledby="pause"></i>
+        <span>pause</span>
+      </button>
     </div>
 
     <!-- Level -->
@@ -54,9 +49,7 @@
       </div>
     </div>
   </div>
-
-  <!-- Canvas -->
-  <!-- <canvas id="gameCanvas"></canvas> -->
+  <div id="water" class="water"></div>
 
   <!-- Game over -->
   <div id="gameOver" class="game-over">

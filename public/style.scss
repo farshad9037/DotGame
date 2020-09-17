@@ -1,11 +1,12 @@
-@import './scss/common';
 @import './scss/variables';
-@import './scss/mixins';
 @import './scss/animations';
+@import './scss/mixins';
+@import './scss/common';
 
 .cover {
   min-height: 100%;
-  background: #55b6b4 url(https://cdn.glitch.com/27f1b8ee-3948-4cb4-9c64-3854da42f337%2Fbounce.gif?1553621804812) no-repeat center;
+  background: #55b6b4 url(https://acegif.com/wp-content/gifs/water-20.gif) no-repeat center;
+  // background: #55b6b4 url(https://media1.tenor.com/images/40b8c63b8bedaa773864906740d86a30/tenor.gif?itemid=10930023) no-repeat center;
   background-size: cover;
   text-align: center;
 
@@ -19,18 +20,12 @@
   }
   
   .playGameBtn {
-    background: 0;
-    border: 0;
-    color: $white;
+    @include shake;
+    @include button-reset;
     font-size: $play-game-icon-size;
-    outline: none;
-    animation: shake 0.82s cubic-bezier(.36,.07,.19,.97) both;
-    transform: translate3d(0, 0, 0);
-    backface-visibility: hidden;
-    perspective: 1000px;
 
     &:hover {
-      opacity: 0.8
+      opacity: 0.8;
     }
   }
 }
@@ -43,9 +38,22 @@
   left: 0;
   padding: 0.5em;
   position: absolute;
-  right: 0;
-  top: 0;
+  bottom: 0;
   width: 100%;
+  z-index: 1;
+  height: $header-height;
+
+  .gameControl {
+    @include flex-center;
+    @include button-reset;
+    font-size: 1.5em;
+    flex-direction: column;
+    min-width: 50px;
+
+    span {
+      font-size: 16px;
+    }
+  }
   
   .score {
     @include flex-center;
@@ -71,7 +79,7 @@
   -webkit-appearance: none;
   -webkit-transition: .1s;
   appearance: none;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(255, 255, 255, 0.5);
   border-radius: 5px;
   height: 5px;
   width: 100%;
@@ -84,7 +92,7 @@
   &::-webkit-slider-thumb {
     -webkit-appearance: none;
     appearance: none;
-    background: rgb(0, 0, 0);
+    background: rgb(255, 255, 255);
     border-radius: 10px;
     cursor: pointer;
     height: 20px;
@@ -116,4 +124,15 @@
   @include flex-center;
   flex-direction: column;
   display: none;
+}
+
+.water {
+  background: #000;
+  overflow: hidden;
+  // background: #55b6b4 url(https://acegif.com/wp-content/gifs/water-20.gif) no-repeat center;
+  background: #55b6b4 url(https://i.gifer.com/Xp9f.gif) no-repeat center;
+  background-size: cover;
+  position: absolute;
+  bottom: 0;
+  width:100%;
 }

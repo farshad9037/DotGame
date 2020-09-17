@@ -13,7 +13,7 @@ const CONFIG = {
   maxLostCount: 10,
   /** Configure dot colors {radius: color} */
   colors: {
-    10: 'rgba(255, 255, 255, 1)',
+    10: 'rgba(0, 0, 0, 1)',
     20: 'rgba(255, 0, 0, 0.9)',
     30: 'rgba(31, 47, 155, 0.8)',
     40: 'rgba(0, 128, 0, 0.7)',

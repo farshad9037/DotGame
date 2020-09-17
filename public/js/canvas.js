@@ -8,7 +8,7 @@ export default class Canvas {
    * @param {String} width
    */
   constructor() {
-    this._height = window.outerHeight;
+    this._height = window.innerHeight;
     this._width = window.innerWidth;
     // Co-ordinates of clicked position
     this._clickedPos = { x: 0, y: 0 };
@@ -17,7 +17,7 @@ export default class Canvas {
 
   create() {
     let canvasEle = document.createElement('canvas');
-    canvasEle.height = window.outerHeight;
+    canvasEle.height = window.innerHeight;
     canvasEle.width = window.innerWidth;
     document.body.appendChild(canvasEle);
     this._canvas = canvasEle;
@@ -27,7 +27,7 @@ export default class Canvas {
     }, false);
 
     window.addEventListener('resize', () => {
-      this._canvas.height = window.outerHeight;
+      this._canvas.height = window.innerHeight;
       this._canvas.width = window.innerWidth;
     }, false);
 
@@ -67,7 +67,7 @@ export default class Canvas {
     }, false);
 
     window.removeEventListener('resize', () => {
-      this._canvas.height = window.outerHeight;
+      this._canvas.height = window.innerHeight;
       this._canvas.width = window.innerWidth;
     }, false);
 
