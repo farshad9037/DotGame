@@ -1,13 +1,15 @@
 "use strict";
 
+import './js/components/customSlider.js';
+import './js/components/customScore.js';
+
 import CONFIG from './js/config.js';
 import Canvas from './js/canvas.js';
 
 const canvas = new Canvas();
 const headerEl = document.getElementById('gameHeader');
-const scoreEl = document.getElementById('gameScore');
-const slider = document.getElementById("gameLevelSlider");
-const levelEl = document.getElementById("gameLevel");
+const customScore = document.getElementById('customScore');
+const customSlider = document.getElementById("customSlider");
 const play = document.getElementById("play");
 const pause = document.getElementById("pause");
 const coverEl = document.getElementById('gameCover');
@@ -17,11 +19,6 @@ const playGameBtn = document.getElementById('playGameBtn');
 const water = document.getElementById('water');
 
 let animateReq;
-
-const setSliderValue = (value) => {
-  slider.value = value;
-  levelEl.innerHTML = value;
-};
 
 const handleGameStatus = () => {
   if (canvas.isAnimate) {
@@ -51,10 +48,9 @@ const start = () => {
   handleGameStatus();
   coverEl.style.display = 'none';
   headerEl.style.display = 'flex';
-  setSliderValue(CONFIG.initLevel);
+  customSlider.value = CONFIG.initLevel;
   canvas.pushDotPerSec(CONFIG.frequency);
   animateReq = requestAnimationFrame(animate);
-  slider.oninput = () => setSliderValue(slider.value)
   window.addEventListener('blur', onBlur, false);
   play.addEventListener('click', controlAnimation, false);
   pause.addEventListener('click', controlAnimation, false);
@@ -64,7 +60,7 @@ const gameOver = () => {
   canvas.isAnimate = false;
   headerEl.style.display = 'none';
   gameOverEl.style.display = 'flex';
-  gameOverScoreEl.innerHTML = scoreEl.innerText;
+  gameOverScoreEl.innerHTML = customScore.innerText;
   window.removeEventListener('blur', onBlur, false);
   play.removeEventListener('click', controlAnimation, false);
   pause.removeEventListener('click', controlAnimation, false);
@@ -77,12 +73,12 @@ function animate() {
 
   canvas.dots.forEach((dot, index) => {
     canvas.$draw(dot);
-    dot.$updateY(slider.value);
+    dot.$updateY(customSlider.value);
     water.style.height = `${parseFloat(water.style.height || '0', 10) + (1 / 60)}px`;
 
     if (curY > 0 && dot.$isClickOnDot(curX, curY)) {
       dot.$pop();
-      scoreEl.innerHTML = `${parseInt(scoreEl.innerText, 10) + dot.points}`;
+      customScore.value += dot.points;
       dot.isClicked = true;
     }
 

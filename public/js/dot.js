@@ -37,7 +37,7 @@ export default class Dot {
      * Speed range is 10px ~ 100px per second based on the configuration.
      * requestAnimationFrame repaint every 1/60 seconds. So (y += slider.value / 60 * <10 ~ 100>) adds (10 ~ 100) every second
     */
-    this._y += Number(sliderValue) / 6;
+    this._y += sliderValue / 6;
   }
 
   $pop() {
