@@ -1,3 +1,5 @@
+import Dot from "./dot.js";
+
 /**
  * @class Canvas
  */
@@ -12,26 +14,22 @@ export default class Canvas {
     this._width = window.innerWidth;
     // Co-ordinates of clicked position
     this._clickedPos = { x: 0, y: 0 };
-    this._canvas = null;
+    this._dots = [new Dot()];
+    this._isAnimate = false;
+    this._dotsInterval = null;
   }
 
   create() {
-    let canvasEle = document.createElement('canvas');
-    canvasEle.height = window.innerHeight;
-    canvasEle.width = window.innerWidth;
-    document.body.appendChild(canvasEle);
-    this._canvas = canvasEle;
+    this._canvas = document.createElement('canvas');
+    this._canvas.height = window.innerHeight;
+    this._canvas.width = window.innerWidth;
+    document.body.appendChild(this._canvas);
 
     this._canvas.addEventListener('mousedown', () => {
       this._clickedPos = { x: event.clientX, y: event.clientY };
     }, false);
 
-    window.addEventListener('resize', () => {
-      this._canvas.height = window.innerHeight;
-      this._canvas.width = window.innerWidth;
-    }, false);
-
-    this._ctx = canvasEle.getContext("2d");
+    this._ctx = this._canvas.getContext("2d");
   }
 
   get clickedPos() {
@@ -44,6 +42,36 @@ export default class Canvas {
 
   get height() {
     return this._height;
+  }
+
+  get dots() {
+    return this._dots;
+  }
+
+  get isAnimate() {
+    return this._isAnimate;
+  }
+
+  set isAnimate(value) {
+    this._isAnimate = value;
+  }
+
+  $pushDot() {
+    this._dots.push(new Dot());
+  }
+
+  pushDotPerSec(frequency) {
+    this._dotsInterval = setInterval(() => {
+      // Check whether game is on before adding new dot
+      if (this._isAnimate) {
+        this._dots.push(new Dot());
+        // canvas.$pushDot();
+      }
+    }, frequency);
+  }
+
+  $removeDot(index) {
+    this._dots.splice(index, 1);
   }
 
   $clearRect() {
@@ -62,13 +90,10 @@ export default class Canvas {
   }
 
   $destroy() {
+    clearInterval(this._dotsInterval);
+
     this._canvas.removeEventListener('mousedown', () => {
       this._clickedPos = { x: event.clientX, y: event.clientY };
-    }, false);
-
-    window.removeEventListener('resize', () => {
-      this._canvas.height = window.innerHeight;
-      this._canvas.width = window.innerWidth;
     }, false);
 
     document.body.removeChild(this._canvas);

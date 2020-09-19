@@ -124,15 +124,17 @@
   @include flex-center;
   flex-direction: column;
   display: none;
+  z-index: 999;
 }
 
 .water {
   background: #000;
   overflow: hidden;
-  // background: #55b6b4 url(https://acegif.com/wp-content/gifs/water-20.gif) no-repeat center;
-  background: #55b6b4 url(https://i.gifer.com/Xp9f.gif) no-repeat center;
+  background: #55b6b4 url(https://acegif.com/wp-content/gifs/water-20.gif) no-repeat center;
   background-size: cover;
   position: absolute;
   bottom: 0;
   width:100%;
+  border-radius: 25% 15% 0 0;
 }
+

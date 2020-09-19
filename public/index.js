@@ -2,12 +2,8 @@
 
 import CONFIG from './js/config.js';
 import Canvas from './js/canvas.js';
-import Game from './js/game.js';
-import Dot from './js/dot.js';
 
-const game = new Game();
 const canvas = new Canvas();
-
 const headerEl = document.getElementById('gameHeader');
 const scoreEl = document.getElementById('gameScore');
 const slider = document.getElementById("gameLevelSlider");
@@ -20,8 +16,6 @@ const gameOverScoreEl = document.getElementById('gameOverScore');
 const playGameBtn = document.getElementById('playGameBtn');
 const water = document.getElementById('water');
 
-let dots = [new Dot()];
-let dotsInterval = null;
 let animateReq;
 
 const setSliderValue = (value) => {
@@ -30,7 +24,7 @@ const setSliderValue = (value) => {
 };
 
 const handleGameStatus = () => {
-  if (game.isPlaying) {
+  if (canvas.isAnimate) {
     play.style.display = 'none';
     pause.style.display = 'flex';
   } else {
@@ -40,12 +34,12 @@ const handleGameStatus = () => {
 }
 
 const onBlur = () => {
-  game.isPlaying = false;
+  canvas.isAnimate = false;
   handleGameStatus();
 };
 
 const controlAnimation = () => {
-  game.isPlaying = !game.isPlaying;
+  canvas.isAnimate = !canvas.isAnimate;
   canvas.clickedPos = { x: 0, y: 0 }
   handleGameStatus();
   animate();
@@ -53,61 +47,47 @@ const controlAnimation = () => {
 
 const start = () => {
   canvas.create();
-  game.isPlaying = true;
-  // water.style.top = `${canvas.height}px`;
+  canvas.isAnimate = true;
   handleGameStatus();
   coverEl.style.display = 'none';
   headerEl.style.display = 'flex';
   setSliderValue(CONFIG.initLevel);
-  pushDotPerSec();
+  canvas.pushDotPerSec(CONFIG.frequency);
   animateReq = requestAnimationFrame(animate);
   slider.oninput = () => setSliderValue(slider.value)
   window.addEventListener('blur', onBlur, false);
   play.addEventListener('click', controlAnimation, false);
   pause.addEventListener('click', controlAnimation, false);
 }
-playGameBtn.addEventListener('click', start, false);
 
 const gameOver = () => {
-  game.isPlaying = false;
-  clearInterval(dotsInterval);
+  canvas.isAnimate = false;
   headerEl.style.display = 'none';
   gameOverEl.style.display = 'flex';
-  gameOverScoreEl.innerHTML = game.score;
+  gameOverScoreEl.innerHTML = scoreEl.innerText;
   window.removeEventListener('blur', onBlur, false);
   play.removeEventListener('click', controlAnimation, false);
   pause.removeEventListener('click', controlAnimation, false);
   canvas.$destroy();
 }
 
-// Push dot every second
-const pushDotPerSec = () => {
-  dotsInterval = setInterval(() => {
-    // Check whether game is on before adding new dot
-    if (game.isPlaying) {
-      dots.push(new Dot());
-    }
-  }, CONFIG.frequency);
-}
-
 function animate() {
   const { x: curX, y: curY } = canvas.clickedPos;
   canvas.$clearRect();
 
-  dots.forEach((dot, index) => {
+  canvas.dots.forEach((dot, index) => {
     canvas.$draw(dot);
     dot.$updateY(slider.value);
     water.style.height = `${parseFloat(water.style.height || '0', 10) + (1 / 60)}px`;
 
     if (curY > 0 && dot.$isClickOnDot(curX, curY)) {
       dot.$pop();
-      game.score += dot.points;
-      scoreEl.innerHTML = game.score;
+      scoreEl.innerHTML = `${parseInt(scoreEl.innerText, 10) + dot.points}`;
       dot.isClicked = true;
     }
 
     if (dot.$isOutOfScreen(canvas.height)) {
-      dots.splice(index, 1);
+      canvas.$removeDot(index);
     }
   });
 
@@ -115,10 +95,13 @@ function animate() {
     gameOver();
   }
 
-  if (!game.isPlaying) {
+  if (!canvas.isAnimate) {
     cancelAnimationFrame(animateReq);
     return;
   }
   animateReq = requestAnimationFrame(animate);
 }
 
+window.onload = () => {
+  playGameBtn.addEventListener('click', start, false);
+}
