@@ -7,26 +7,16 @@ import { getRandomInteger } from './utils.js';
 export default class Dot {
   constructor() {
     /** Genereate random radius */
-    this._radius = getRandomInteger(1, 10) * CONFIG.minDotDiameter / 2; // Random radius between 10 and 100
+    this._radius = this.getRandomInteger(1, 10) * CONFIG.minDotDiameter / 2; // Random radius between 10 and 100
     /** Pick color from the configuration */
     this._color = CONFIG.colors[this._radius * 2];
     /** Random X co-ordinate of the dot ranges from 100 to (canvas width - 100)*/
-    this._x = getRandomInteger(CONFIG.maxDotDiameter / 2, window.outerWidth - CONFIG.maxDotDiameter / 2);
+    this._x = this.getRandomInteger(CONFIG.maxDotDiameter / 2, window.outerWidth - CONFIG.maxDotDiameter / 2);
     /** Initial Y co-ordinate of the dot */
     this._y = -this._radius;
     /** Points inversely proportional to radius */
     this._points = (CONFIG.maxDotDiameter - this._radius * 2) / 10 + 1;
-    /** Flag to determine the status of dot */
-    // this._isClicked = false;
   }
-
-  // get isClicked() {
-  //   return this._isClicked;
-  // }
-
-  // set isClicked(value) {
-  //   this._isClicked = value;
-  // }
 
   get points() {
     return this._points;
@@ -74,5 +64,13 @@ export default class Dot {
     } finally {
       return this._y > refHeight + CONFIG.maxDotDiameter
     }
+  }
+  /**
+   * @param {Number} min Minimum integer (less than max).
+   * @param {Number} max Maximum integer (greater than min).
+   * @returns {Number} A random number between min and max
+   */
+  getRandomInteger(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
   }
 };

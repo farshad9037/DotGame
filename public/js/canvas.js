@@ -6,30 +6,20 @@ import Dot from "./dot.js";
 export default class Canvas {
   /**
    * @constructor
-   * @param {String} height
-   * @param {String} width
    */
   constructor() {
     this._height = window.outerHeight;
     this._width = window.innerWidth;
-    // Co-ordinates of clicked position
     this._clickedPos = { x: 0, y: 0 };
     this._dots = [new Dot()];
     this._isAnimate = false;
     this._dotsInterval = null;
-  }
-
-  create() {
     this._canvas = document.createElement('canvas');
     this._canvas.height = this._height;
     this._canvas.width = this._width;
-    document.body.appendChild(this._canvas);
-
-    this._canvas.addEventListener('mousedown', () => {
-      this._clickedPos = { x: event.clientX, y: event.clientY };
-    }, false);
-
+    this._canvas.addEventListener('mousedown', this._onMouseDown, false);
     this._ctx = this._canvas.getContext("2d");
+    document.body.appendChild(this._canvas);
   }
 
   get clickedPos() {
@@ -56,13 +46,12 @@ export default class Canvas {
     this._isAnimate = value;
   }
 
-  $pushDot() {
-    this._dots.push(new Dot());
+  _onMouseDown = () => {
+    this._clickedPos = { x: event.clientX, y: event.clientY };
   }
 
-  pushDotPerSec(frequency) {
+  $pushDot(frequency) {
     this._dotsInterval = setInterval(() => {
-      // Check whether game is on before adding new dot
       if (this._isAnimate) {
         this._dots.push(new Dot());
       }
@@ -74,7 +63,6 @@ export default class Canvas {
   }
 
   $clearRect() {
-    // Reset clicked coordinates. Otherwise future dots of same coordinates will be considered as clicked
     this._clickedPos = { x: 0, y: 0 };
     this._ctx.clearRect(0, 0, this._width, this._height);
   }
@@ -90,11 +78,7 @@ export default class Canvas {
 
   $destroy() {
     clearInterval(this._dotsInterval);
-
-    this._canvas.removeEventListener('mousedown', () => {
-      this._clickedPos = { x: event.clientX, y: event.clientY };
-    }, false);
-
+    this._canvas.removeEventListener('mousedown', this._onMouseDown, false);
     document.body.removeChild(this._canvas);
   }
 }

@@ -1,63 +1,81 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Dot Game</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
+    <link rel="stylesheet" type="text/css" href="style.css" />
+  </head>
 
-<head>
-  <meta charset="UTF-8">
-  <title>Dot Game</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-  <link rel="stylesheet" type="text/css" href="style.css">
-</head>
-
-<body>
-  <!-- Start screen -->
-  <div id="gameCover" class="cover">
-    <h1 class="gameName">Dot Game</h1>
-    <button type="button" id="playGameBtn" class="playGameBtn" title="Start Game" aria-label="Start Game">
-      <i class="fa fa-play-circle icon" title="Start Game" aria-labelledby="playGameBtn"></i>
-      <span class="label">Start</span>
-    </button>
-  </div>
-
-  <!-- Header -->
-  <div id="gameHeader" class="header">
-    <custom-score id="customScore" label="SCORE"></custom-score>
-    <div class="control-buttons">
-      <!-- Play button -->
-      <button type="button" id="play" aria-label="Play" class="gameControl">
-        <i class="fa fa-play" title="Play" aria-labelledby="play"></i>
-        <span >play</span>
-      </button>
-      <!-- Pause button -->
-      <button type="button" id="pause" aria-label="Pause" class="gameControl">
-        <i class="fa fa-pause" title="Pause" aria-labelledby="pause"></i>
-        <span>pause</span>
+  <body>
+    <!-- Start screen -->
+    <div id="gameCover" class="cover">
+      <h1 class="gameName" aria-label="Dot Game">Dot Game</h1>
+      <button
+        type="button"
+        id="playGameBtn"
+        class="playGameBtn"
+        title="Start Game"
+        aria-label="Start Game"
+      >
+        <i
+          class="fa fa-play-circle icon"
+          title="Start Game"
+          aria-labelledby="playGameBtn"
+        ></i>
+        <span class="label">Start</span>
       </button>
     </div>
-    <!-- Level -->
-    <custom-slider id="customSlider" label="LEVEL" min="1" max="10" value="1"></custom-slider>
-  </div>
-  <div id="water" class="water"></div>
 
-  <!-- Game over -->
-  <div id="gameOver" class="game-over">
-    <div>
-      <img src="https://cdn.glitch.com/27f1b8ee-3948-4cb4-9c64-3854da42f337%2Fthumbnails%2Fgameover.png?1553621747369" width="200" />
-    </div>
-    <div>
-      <span>Your score: </span>
-      <span id="gameOverScore">0</span>
-    </div>
-    <!-- Restart button -->
-    <div role="button" onclick="window.location.reload()">
-      <div class="l-h-0">
-        <img src="https://cdn.glitch.com/27f1b8ee-3948-4cb4-9c64-3854da42f337%2Frestart.svg?1553448796433" width="30" height="30" />
+    <!-- Game Info-->
+    <div id="gameInfo" class="gameInfo">
+      <custom-score id="customScore" label="SCORE"></custom-score>
+      <div class="control-buttons">
+        <!-- Play button -->
+        <button type="button" id="play" aria-label="Play" class="gameControl">
+          <i class="fa fa-play" title="Play" aria-labelledby="play"></i>
+          <span>play</span>
+        </button>
+        <!-- Pause button -->
+        <button type="button" id="pause" aria-label="Pause" class="gameControl">
+          <i class="fa fa-pause" title="Pause" aria-labelledby="pause"></i>
+          <span>pause</span>
+        </button>
       </div>
-      <span class="label l-h-0">Try again</span>
+      <!-- Level -->
+      <custom-slider
+        id="customSlider"
+        label="LEVEL"
+        min="1"
+        max="10"
+        value="1"
+      ></custom-slider>
     </div>
-  </div>
+    <div id="water" class="water"></div>
 
-  <script type="module" src="index.js"></script>
-</body>
+    <!-- Game over -->
+    <div id="gameOver" class="game-over">
+      <div>
+        <img
+          src="gameover.png"
+          width="200"
+        />
+      </div>
+      <div>
+        <span>Your score: </span>
+        <span id="gameOverScore">0</span>
+      </div>
+      <!-- Restart button -->
+      <button type="button" id="restart" aria-label="Restart" onclick="location.reload(true)" class="gameControl">
+        <i class="fa fa-refresh" title="Restart" aria-labelledby="restart"></i>
+        <span>Try again</span>
+      </div>
+    </div>
 
+    <script type="module" src="index.js"></script>
+  </body>
 </html>
