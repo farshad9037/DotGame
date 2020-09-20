@@ -17,19 +17,23 @@ export default class Dot {
     /** Points inversely proportional to radius */
     this._points = (CONFIG.maxDotDiameter - this._radius * 2) / 10 + 1;
     /** Flag to determine the status of dot */
-    this._isClicked = false;
+    // this._isClicked = false;
   }
 
-  get isClicked() {
-    return this._isClicked;
-  }
+  // get isClicked() {
+  //   return this._isClicked;
+  // }
 
-  set isClicked(value) {
-    this._isClicked = value;
-  }
+  // set isClicked(value) {
+  //   this._isClicked = value;
+  // }
 
   get points() {
     return this._points;
+  }
+
+  get radius() {
+    return this._radius;
   }
 
   $updateY(sliderValue) {
@@ -44,7 +48,7 @@ export default class Dot {
     this._radius = 0;
   }
 
-  $isClickOnDot(curX, curY) {
+  $handleClick(curX, curY, cb) {
     try {
       if (isNaN(curX)) throw "curX must be a number";
       if (isNaN(curY)) throw "curY must be a number";
@@ -52,7 +56,12 @@ export default class Dot {
       console.error(error);
     } finally {
       const { _x, _y, _radius } = this;
-      return curX > _x - _radius && curX < _x + _radius && curY > _y - _radius && curY < _y + _radius;
+      const isOnDot = curY > 0 && curX > _x - _radius && curX < _x + _radius && curY > _y - _radius && curY < _y + _radius;
+      if (isOnDot) {
+        this._radius = 0;
+        cb && cb();
+      }
+      return isOnDot;
     }
   }
 

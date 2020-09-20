@@ -14,19 +14,14 @@
   <div id="gameCover" class="cover">
     <h1 class="gameName">Dot Game</h1>
     <button type="button" id="playGameBtn" class="playGameBtn" title="Start Game" aria-label="Start Game">
-      <i class="fa fa-play-circle" title="Start Game" aria-labelledby="playGameBtn"></i>
+      <i class="fa fa-play-circle icon" title="Start Game" aria-labelledby="playGameBtn"></i>
+      <span class="label">Start</span>
     </button>
   </div>
 
   <!-- Header -->
   <div id="gameHeader" class="header">
-    <!-- Score -->
-    <div class="score">
-      <span class="label">SCORE</span>
-      <span id="gameScore" class="number">0</span>
-      <span class="label l-h-0">coins</span>
-    </div>
-
+    <custom-score id="customScore" label="SCORE"></custom-score>
     <div class="control-buttons">
       <!-- Play button -->
       <button type="button" id="play" aria-label="Play" class="gameControl">
@@ -39,15 +34,8 @@
         <span>pause</span>
       </button>
     </div>
-
     <!-- Level -->
-    <div class="level text-center">
-      <span class="label">LEVEL</span>
-      <span id="gameLevel" class="number">1</span>
-      <div>
-        <input type="range" min="1" max="10" value="5" id="gameLevelSlider" class="slider">
-      </div>
-    </div>
+    <custom-slider id="customSlider" label="LEVEL" min="1" max="10" value="1"></custom-slider>
   </div>
   <div id="water" class="water"></div>
 

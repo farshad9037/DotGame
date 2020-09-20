@@ -5,9 +5,9 @@
 
 .cover {
   min-height: 100%;
-  background: #55b6b4 url(https://acegif.com/wp-content/gifs/water-20.gif) no-repeat center;
-  // background: #55b6b4 url(https://media1.tenor.com/images/40b8c63b8bedaa773864906740d86a30/tenor.gif?itemid=10930023) no-repeat center;
+  background: $white url(https://images-na.ssl-images-amazon.com/images/I/61V9mPHBSGL._AC_SL1500_.jpg) no-repeat center;
   background-size: cover;
+  opacity: 0.8;
   text-align: center;
 
   .gameName {
@@ -22,17 +22,24 @@
   .playGameBtn {
     @include shake;
     @include button-reset;
-    font-size: $play-game-icon-size;
+    background-color: $white;
 
-    &:hover {
-      opacity: 0.8;
+    .icon {
+      font-size: $play-game-icon-size;
+    }
+
+    .label {
+      display: block;
+      font-size: 2em;
+      font-family: cursive;
+      line-height: 1;
     }
   }
 }
 
 .header {
   @include flex-center;
-  background: rgba(0, 0, 0, 0.1);
+  // background: rgba(0, 0, 0, 0.1);
   display: none;
   justify-content: space-evenly;
   left: 0;
@@ -80,17 +87,27 @@
   @include flex-center;
   flex-direction: column;
   display: none;
-  z-index: 999;
+  position: absolute;
+  top: calc(50% - 100px);
+  left: calc(50% - 100px);
+  height: 200px;
+  width: 200px;
 }
 
 .water {
   background: #000;
   overflow: hidden;
-  background: #55b6b4 url(https://acegif.com/wp-content/gifs/water-20.gif) no-repeat center;
+  // background: #04ACFF url(https://acegif.com/wp-content/gifs/water-20.gif) no-repeat center;
+  background-color: #04ACFF;
+  // background-color: #045de9;
+  // background-image: linear-gradient(315deg, #045de9 0%, #09c6f9 74%);
   background-size: cover;
   position: absolute;
   bottom: 0;
   width:100%;
   border-radius: 25% 15% 0 0;
+  min-height: 100px;
+  transition: min-height 1s;
+  transition-timing-function: cubic-bezier(.2,.6,.8,.4);
 }
 

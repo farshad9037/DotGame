@@ -1,3 +1,5 @@
+import CONFIG from "../config.js";
+
 class customSlider extends HTMLElement {
   constructor() {
     super();
@@ -5,12 +7,13 @@ class customSlider extends HTMLElement {
     this.label = this.getAttribute('label');
     this.min = this.getAttribute('min');
     this.max = this.getAttribute('max');
-    this._value = this.min;
+    this._value = CONFIG.initLevel;
     this.shadow = this.attachShadow({ mode: 'open' });
     this.shadow.innerHTML = `
       <style>
-        .center {
+        .wrapper {
           text-align: center;
+          width: 220px;
         }
 
         .number {
@@ -44,7 +47,7 @@ class customSlider extends HTMLElement {
           width: 20px;
         }
       </style>
-      <div class="center">
+      <div class="wrapper">
         <label for="slider" title="level" aria-labelledby="slider">
           <span class="label">${this.label}</span>
           <span class="number" id="currentLevel">${this.value}</span>

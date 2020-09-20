@@ -4,7 +4,7 @@ const CONFIG = {
   /** Maximun diameter of the dot in px */
   maxDotDiameter: 100,
   /** Game level (speed = (1 * 10)px/s) */
-  initLevel: 1,
+  initLevel: 5,
   /** Frequency to push dot in ms (1000ms = 1s)*/
   frequency: 1000,
   /** Game autospeed increase frequency */

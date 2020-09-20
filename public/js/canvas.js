@@ -10,7 +10,7 @@ export default class Canvas {
    * @param {String} width
    */
   constructor() {
-    this._height = window.innerHeight;
+    this._height = window.outerHeight;
     this._width = window.innerWidth;
     // Co-ordinates of clicked position
     this._clickedPos = { x: 0, y: 0 };
@@ -21,8 +21,8 @@ export default class Canvas {
 
   create() {
     this._canvas = document.createElement('canvas');
-    this._canvas.height = window.innerHeight;
-    this._canvas.width = window.innerWidth;
+    this._canvas.height = this._height;
+    this._canvas.width = this._width;
     document.body.appendChild(this._canvas);
 
     this._canvas.addEventListener('mousedown', () => {
@@ -65,7 +65,6 @@ export default class Canvas {
       // Check whether game is on before adding new dot
       if (this._isAnimate) {
         this._dots.push(new Dot());
-        // canvas.$pushDot();
       }
     }, frequency);
   }
