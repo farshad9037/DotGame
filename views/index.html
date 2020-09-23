@@ -14,7 +14,7 @@
   <body>
     <!-- Start screen -->
     <div id="gameCover" class="cover">
-      <h1 class="gameName" aria-label="Dot Game">Dot Game</h1>
+      <custom-logo id="dotGame" label="Dot Game"></custom-logo>
       <button
         type="button"
         id="playGameBtn"
@@ -38,12 +38,12 @@
         <!-- Play button -->
         <button type="button" id="play" aria-label="Play" class="gameControl">
           <i class="fa fa-play" title="Play" aria-labelledby="play"></i>
-          <span>play</span>
+          <span class="controlLabel">play</span>
         </button>
         <!-- Pause button -->
         <button type="button" id="pause" aria-label="Pause" class="gameControl">
           <i class="fa fa-pause" title="Pause" aria-labelledby="pause"></i>
-          <span>pause</span>
+          <span class="controlLabel">pause</span>
         </button>
       </div>
       <!-- Level -->
@@ -55,7 +55,7 @@
         value="1"
       ></custom-slider>
     </div>
-    <div id="water" class="water"></div>
+    <custom-water id="water" min-height="100"></custom-water>
 
     <!-- Game over -->
     <div id="gameOver" class="game-over">
@@ -70,9 +70,9 @@
         <span id="gameOverScore">0</span>
       </div>
       <!-- Restart button -->
-      <button type="button" id="restart" aria-label="Restart" onclick="location.reload(true)" class="gameControl">
+      <button type="button" id="restart" aria-label="Restart" onclick="window.location.reload(true)" class="gameControl">
         <i class="fa fa-refresh" title="Restart" aria-labelledby="restart"></i>
-        <span>Try again</span>
+        <span class="controlLabel">Try again</span>
       </div>
     </div>
 

@@ -1,13 +1,22 @@
-import CONFIG from "../config.js";
-
+/**
+ * @customComponent customSlider
+ */
 class customSlider extends HTMLElement {
+  /**
+   * @constructor
+   * @prop {String} id ID of the element
+   * @prop {String} label Label of the slider
+   * @prop {String} min Minimun value
+   * @prop {String} max Maximum value
+   * @prop {String} value Initial value
+   */
   constructor() {
     super();
     this.id = this.getAttribute('id');
     this.label = this.getAttribute('label');
     this.min = this.getAttribute('min');
     this.max = this.getAttribute('max');
-    this._value = CONFIG.initLevel;
+    this._value = this.getAttribute('value');
     this.shadow = this.attachShadow({ mode: 'open' });
     this.shadow.innerHTML = `
       <style>
@@ -24,11 +33,8 @@ class customSlider extends HTMLElement {
           -webkit-appearance: none;
           -webkit-transition: .1s;
           appearance: none;
-          background: rgba(0, 0, 0, 0.5);
-          border-radius: 5px;
-          height: 5px;
+          background: linear-gradient(45deg, transparent, black);
           width: 100%;
-          opacity: 0.7;
           outline: none;
           transition: opacity .1s;
         }
@@ -40,7 +46,7 @@ class customSlider extends HTMLElement {
         .slider::-webkit-slider-thumb {
           -webkit-appearance: none;
           appearance: none;
-          background: rgb(255, 255, 255);
+          background: #ffffff;
           border-radius: 10px;
           cursor: pointer;
           height: 20px;

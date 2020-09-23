@@ -2,12 +2,17 @@
 
 import './js/customComponents/customSlider.js';
 import './js/customComponents/customScore.js';
-import Game from './js/game.js';
-import CONFIG from './js/config.js';
+import './js/customComponents/customWater.js';
+import './js/customComponents/customLogo.js';
+import Game from './js/classes/game.js';
+import CONFIG from './config.js';
 
 window.onload = () => {
   const playGameBtn = document.getElementById('playGameBtn');
   const game = new Game({
+    minDotDiameter: CONFIG.minDotDiameter,
+    maxDotDiameter: CONFIG.maxDotDiameter,
+    colors: CONFIG.colors,
     playId: 'play',
     pauseId: 'pause',
     coverId: 'gameCover',
@@ -16,7 +21,7 @@ window.onload = () => {
     gameOverScoreId: 'gameOverScore',
     customScoreId: customScore,
     customSliderId: 'customSlider',
-    waterId: 'water',
+    customwWaterId: 'water',
     dotFrequency: CONFIG.frequency,
   });
 

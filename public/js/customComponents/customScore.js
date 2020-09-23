@@ -1,4 +1,12 @@
+/**
+ * @customComponent customScore
+ */
 class customScore extends HTMLElement {
+  /**
+   * @constructor
+   * @prop {String} id ID of the element
+   * @prop {String} label Score label
+   */
   constructor() {
     super();
     this.id = this.getAttribute('id');
