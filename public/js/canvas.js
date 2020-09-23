@@ -12,7 +12,8 @@ export default class Canvas {
     this.canvas = document.createElement('canvas');
     this.canvas.height = this._height;
     this.canvas.width = this.width;
-    this.canvas.addEventListener('mousedown', this._onMouseDown, false);
+    this.onMouseDown = () => this._clickedPos = { x: event.clientX, y: event.clientY };
+    this.canvas.addEventListener('mousedown', this.onMouseDown, false);
     this.ctx = this.canvas.getContext("2d");
     document.body.appendChild(this.canvas);
   }
@@ -27,10 +28,6 @@ export default class Canvas {
 
   get height() {
     return this._height;
-  }
-
-  _onMouseDown = () => {
-    this._clickedPos = { x: event.clientX, y: event.clientY };
   }
 
   $clearRect() {
@@ -48,7 +45,7 @@ export default class Canvas {
   }
 
   $destroy() {
-    this.canvas.removeEventListener('mousedown', this._onMouseDown, false);
+    this.canvas.removeEventListener('mousedown', this.onMouseDown, false);
     document.body.removeChild(this.canvas);
   }
 }

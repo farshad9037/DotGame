@@ -61,6 +61,10 @@ class customSlider extends HTMLElement {
         </label>
       </div>
     `;
+    this.setValue = (event) => {
+      this._value = parseInt(event.target.value, 10);
+      this.currentLevel.innerText = this.value;
+    }
   }
 
   connectedCallback() {
@@ -71,11 +75,6 @@ class customSlider extends HTMLElement {
 
   disconnectedCallback() {
     this.input.removeEventListener('input', this.setValue, false);
-  }
-
-  setValue = (event) => {
-    this._value = parseInt(event.target.value, 10);
-    this.currentLevel.innerText = this.value;
   }
 
   get value() {

@@ -1,17 +1,14 @@
 "use strict";
 
-import './js/customComponents/customSlider.js';
-import './js/customComponents/customScore.js';
-import './js/customComponents/customWater.js';
-import './js/customComponents/customLogo.js';
-import Game from './js/classes/game.js';
-import CONFIG from './config.js';
+import Game from './js/game.js';
+import CONFIG from './js/config.js';
 
 window.onload = () => {
   const playGameBtn = document.getElementById('playGameBtn');
   const game = new Game({
     minDotDiameter: CONFIG.minDotDiameter,
     maxDotDiameter: CONFIG.maxDotDiameter,
+    dotFrequency: CONFIG.frequency,
     colors: CONFIG.colors,
     playId: 'play',
     pauseId: 'pause',
@@ -19,10 +16,9 @@ window.onload = () => {
     headerId: 'gameInfo',
     gameOverId: 'gameOver',
     gameOverScoreId: 'gameOverScore',
-    customScoreId: customScore,
+    customScoreId: 'customScore',
     customSliderId: 'customSlider',
     customwWaterId: 'water',
-    dotFrequency: CONFIG.frequency,
   });
 
   const _startGame = () => {
@@ -31,4 +27,5 @@ window.onload = () => {
   };
 
   playGameBtn.addEventListener('click', _startGame, false);
+  document.body.style.visibility = 'visible';
 }
