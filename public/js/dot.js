@@ -14,6 +14,7 @@ export default class Dot {
     this.x = Dot.randomInteger(maxDiameter / 2, window.innerWidth - maxDiameter / 2);
     this._y = -this._radius;
     this._points = (maxDiameter - this._radius * 2) / 10 + 1;
+    this._isClicked = false;
   }
   /**
    * @returns {Number} Points of the dot 
@@ -26,6 +27,24 @@ export default class Dot {
    */
   get radius() {
     return this._radius;
+  }
+  /**
+   * @param {Number} Value radius of the dot
+   */
+  set radius(value) {
+    this._radius = value;
+  }
+  /**
+   * @returns {Boolean} whether dot clicked
+   */
+  get isClicked() {
+    return this._isClicked;
+  }
+  /**
+   * @param {Boolean} Value whether dot clicked
+   */
+  set isClicked(value) {
+    this._isClicked = value;
   }
   /**
    * @returns {Number} Y co-ordinate of the dot 
@@ -42,15 +61,10 @@ export default class Dot {
   /**
    * @param {Number} curX current clicked X
    * @param {Number} curY current clicked Y
-   * @param {Function} cb callback function
    */
-  $handleClick(curX, curY, cb) {
+  $isClickedOnDot(curX, curY) {
     const { x, y, _radius } = this;
     const isOnDot = curY > 0 && curX > x - _radius && curX < x + _radius && curY > y - _radius && curY < y + _radius;
-    if (isOnDot) {
-      this._radius = 0;
-      cb && cb();
-    }
     return isOnDot;
   }
   /**

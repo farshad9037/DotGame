@@ -35,7 +35,6 @@ export default class Game {
     this.customSliderEl = document.getElementById(customSliderId);
     this.customWaterEl = document.getElementById(customwWaterId);
     this.dotFrequency = dotFrequency;
-    this.animateReq = null;
 
     this.controlAnimation = () => {
       this.isAnimate = !this.isAnimate;
@@ -50,32 +49,13 @@ export default class Game {
     };
 
     this.animate = () => {
-      const { x: curX, y: curY } = this.canvas.clickedPos;
-      const speed = this.customSliderEl.value;
-
-      this.canvas.$clearRect();
-      this.dots.forEach((dot, index) => {
-        this.canvas.$draw(dot);
-        dot.y += speed / 6;
-        dot.$handleClick(curX, curY, () => (this.customScoreEl.value += dot.points));
-
-        if (dot.$isOutOfScreen(this.customWaterEl)) {
-          this.dots.splice(index, 1);
-          if (dot.radius > 0) {
-            this.customWaterEl.$fill(dot.radius);
-          }
-        }
-      });
-
-      if (this.customWaterEl.minHeight >= this.canvas.height) {
-        this.over();
-      }
-
       if (!this.isAnimate) {
-        window.cancelAnimationFrame(this.animateReq);
+        window.cancelAnimationFrame(this.animate);
         return;
       }
-      this.animateReq = window.requestAnimationFrame(this.animate);
+      window.requestAnimationFrame(this.animate);
+      this.updateDots();
+      this.handleGameOver();
     };
 
     this.handleStatus = () => {
@@ -89,6 +69,28 @@ export default class Game {
     };
 
     this.bindEvents();
+  }
+  /**
+   * Updates dots position
+   */
+  updateDots() {
+    const { x: curX, y: curY } = this.canvas.clickedPos;
+    const speed = this.customSliderEl.value;
+
+    this.canvas.$clearRect();
+    this.dots.forEach((dot, index) => {
+      if (dot.$isOutOfScreen(this.customWaterEl)) {
+        !dot.isClicked && this.customWaterEl.$fill(dot.radius);
+        this.dots.splice(index, 1);
+      } else if (dot.$isClickedOnDot(curX, curY)) {
+        dot.radius = 0;
+        dot.isClicked = true;
+        this.customScoreEl.value += dot.points
+      } else {
+        this.canvas.$draw(dot);
+        dot.y += speed / 6;
+      }
+    });
   }
   /**
    * bind all the events required for the game
@@ -119,14 +121,16 @@ export default class Game {
   /**
    * Handles game over
    */
-  over() {
-    this.isAnimate = false;
-    Game.hide(this.headerEl);
-    Game.show(this.gameOverEl, "flex");
-    this.gameOverScoreEl.innerText = String(this.customScoreEl.value);
-    this.unbindEvents();
-    window.clearInterval(this.dotsInterval);
-    this.canvas.$destroy();
+  handleGameOver() {
+    if (this.customWaterEl.minHeight >= this.canvas.height) {
+      this.isAnimate = false;
+      Game.hide(this.headerEl);
+      Game.show(this.gameOverEl, "flex");
+      this.gameOverScoreEl.innerText = String(this.customScoreEl.value);
+      this.unbindEvents();
+      window.clearInterval(this.dotsInterval);
+      this.canvas.$destroy();
+    }
   }
   /**
    * Handles game start
@@ -137,7 +141,7 @@ export default class Game {
     Game.hide(this.coverEl);
     Game.show(this.headerEl, "flex");
     this.pushDot();
-    this.animateReq = window.requestAnimationFrame(this.animate);
+    this.animate();
   };
   /**
    * @param {Element} element
